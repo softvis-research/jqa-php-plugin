@@ -17,6 +17,8 @@ import static org.junit.Assert.assertTrue;
 import falk.php.model.PHPDirectoryDescriptor;
 import falk.php.model.PHPFileDescriptor;
 import falk.php.model.PHPLineDescriptor;
+import falk.php.scanner.PHPLexer;
+import java.io.InputStream;
 
 /**
  * Unit test for simple App.
@@ -32,12 +34,14 @@ public class PHPScannerTest extends AbstractPluginIT
         assertTrue( true );
     }
     
+    
     @Test
     public void scanPHPFileTest() {
         System.out.println("falk.PHPScannerPluginTest.scanPHPFileTest()");
          store.beginTransaction();
          
-         File testFile = new File(getClassesDirectory(PHPScannerTest.class), "../../src/test/testfiles/index.php");
+         ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
+         File testFile = new File(classLoader.getResource("testfiles/index.php").getFile());
           System.out.println(testFile.getAbsolutePath());
           assertTrue (testFile.exists());
           
@@ -60,4 +64,17 @@ public class PHPScannerTest extends AbstractPluginIT
          
         store.commitTransaction();
     }
+    
+    @Test
+    public void scanPHPLexerTest() {
+        ClassLoader classLoader = new PHPLexer().getClass().getClassLoader();
+        //File testFile = new File(classLoader.getResource("testfiles/index.php").getFile());
+        InputStream inputStream = classLoader.getResourceAsStream("testfiles/index.php");
+       
+        
+        falk.php.scanner.PHPLexer l = new falk.php.scanner.PHPLexer();
+        l.test(inputStream);
+    }
+    
+     
 }
