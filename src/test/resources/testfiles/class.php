@@ -1,22 +1,20 @@
 <?php
-/*
- * test
- */
+
 namespace a\b;
+
+use x\y;
 
 class index {
     
-    public $_test = 1;
+    private $_p = 1;
 
 
     public function __construct(){
         echo "text index contructor";
     }
     
-    public function x($y){
-        $z = new c\d();
-        
-        
+    public function call($c){
+        $d = new e\f();
+        $e = y::test();
     }
-    
 }

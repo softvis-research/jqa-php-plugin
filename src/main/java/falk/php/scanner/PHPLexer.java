@@ -5,6 +5,7 @@
  */
 package falk.php.scanner;
 
+import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,6 +16,8 @@ import falk.php.PhpLexer;
 import falk.php.PhpParser;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
+import java.io.File;
 
 
 /**
@@ -23,11 +26,13 @@ import java.util.Set;
  */
 public class PHPLexer {
     
-    public void test (InputStream inputStream) {
+    public void test (final File item) {
         try {
          
+             InputStream inputStream = FileUtils.openInputStream(item);
+
         
-        Lexer lexer = new PhpLexer(CharStreams.fromStream(inputStream));
+            Lexer lexer = new PhpLexer(CharStreams.fromStream(inputStream));
         
 //        Token t;
 //       
@@ -52,12 +57,31 @@ public class PHPLexer {
 //            parser.setBuildParseTree(true);
 //            
         ParseTree tree = parser.htmlDocument();
-               System.err.println(tree.toStringTree(parser));
+        System.err.println(tree.toStringTree(parser));
+        parseTree(tree, 0);
         
         } catch (IOException e) {
          e.printStackTrace();
          System.out.println(e);
       }
     }
+    
+    protected void parseTree(ParseTree tree, int level){
+        int childCount = tree.getChildCount();
+        
+        String pad = "##############################".substring(0, level);
+        System.err.println(pad + " " + tree.getClass().getCanonicalName());
+        System.err.println(pad + " " + tree.getText());
+        
+        
+        for (int i = 0; i < childCount; i++) {
+            ParseTree childTree = tree.getChild(i);
+            
+            
+            
+            parseTree(childTree, level + 1);
+        }
+    }
+            
     
 }

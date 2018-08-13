@@ -68,12 +68,11 @@ public class PHPScannerTest extends AbstractPluginIT
     @Test
     public void scanPHPLexerTest() {
         ClassLoader classLoader = new PHPLexer().getClass().getClassLoader();
-        //File testFile = new File(classLoader.getResource("testfiles/index.php").getFile());
-        InputStream inputStream = classLoader.getResourceAsStream("testfiles/index.php");
+        File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
+        assertTrue (testFile.exists());
        
-        
         falk.php.scanner.PHPLexer l = new falk.php.scanner.PHPLexer();
-        l.test(inputStream);
+        l.test(testFile);
     }
     
      
