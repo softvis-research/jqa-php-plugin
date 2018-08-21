@@ -17,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 import org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
-import org.jqassistant.contrib.plugin.php.scanner.PHPLexer;
 import java.io.InputStream;
 
 /**
@@ -64,16 +63,5 @@ public class PHPScannerTest extends AbstractPluginIT
          
         store.commitTransaction();
     }
-    
-    @Test
-    public void scanPHPLexerTest() {
-        ClassLoader classLoader = new PHPLexer().getClass().getClassLoader();
-        File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
-        assertTrue (testFile.exists());
-       
-        org.jqassistant.contrib.plugin.php.scanner.PHPLexer l = new org.jqassistant.contrib.plugin.php.scanner.PHPLexer();
-        l.test(testFile);
-    }
-    
      
 }

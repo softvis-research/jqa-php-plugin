@@ -20,10 +20,21 @@ import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
+import java.io.File;
+import java.io.InputStream;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 
 
 import static java.util.Arrays.asList;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.io.FileUtils;
+import org.jqassistant.contrib.plugin.php.PhpLexer;
+import org.jqassistant.contrib.plugin.php.PhpParser;
+import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
 
 @ScannerPlugin.Requires(FileDescriptor.class)
 public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PHPFileDescriptor> {
@@ -63,7 +74,10 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
                 pumlLineParser.parseLine(line);
             }
         }
-
+        
+        final PHPSourceParser sourceParser = new PHPSourceParser(store, phpFileDescriptor);
+        sourceParser.parseFile(item);
+        
         return phpFileDescriptor;
     }
 
@@ -81,5 +95,5 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
 
         LOGGER.info(String.format("php plugin looks for files with suffixes '%s'", suffixes.toString()));
     }
-
+    
 }

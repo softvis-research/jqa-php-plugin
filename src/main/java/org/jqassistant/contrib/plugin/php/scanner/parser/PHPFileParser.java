@@ -24,22 +24,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class PHPFileParser {
     
-    protected ScannerContext sc;
     
-    public void PHPFileParser(ScannerContext sc){
-        this.sc = sc;
-    }
     
-    public PHPClass parse(ParseTree tree){   
-        //JavaTypeResolver nachschauen
-        //String n = "xyz";
-        PHPClass returnValue;// = sc.getStore().find(PHPClass.class, n);
-        //if (returnValue == null){
-            returnValue = sc.getStore().create(PHPClass.class);
-            
-        //}
+    public void parse(ParseTree tree, PHPFileDescriptor fileDescriptor){   
         
-        return returnValue;
+        System.out.println("org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser.parse()");
+        
     }
    
     

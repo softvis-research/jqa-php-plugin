@@ -13,8 +13,8 @@ import java.util.List;
  *
  * @author falk
  */
-@Label("Class")
-public interface PHPClass extends PHPDescriptor, PHPType {
+@Label("Interface")
+public interface PHPInterface extends PHPDescriptor, PHPType {
 
     @Relation("EXTENDS")
     PHPClass getSuperClass();
