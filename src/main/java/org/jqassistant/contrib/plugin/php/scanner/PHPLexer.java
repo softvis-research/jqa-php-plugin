@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.scanner;
+package org.jqassistant.contrib.plugin.php.scanner;
 
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
 import java.io.IOException;
@@ -12,8 +12,8 @@ import java.io.InputStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-import falk.php.PhpLexer;
-import falk.php.PhpParser;
+import org.jqassistant.contrib.plugin.php.PhpLexer;
+import org.jqassistant.contrib.plugin.php.PhpParser;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;

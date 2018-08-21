@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.scanner;
+package org.jqassistant.contrib.plugin.php.scanner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
-import falk.php.model.PHPFileDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 
 
 import static java.util.Arrays.asList;

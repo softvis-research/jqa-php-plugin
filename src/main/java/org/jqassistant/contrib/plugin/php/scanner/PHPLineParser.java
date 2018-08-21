@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.scanner;
+package org.jqassistant.contrib.plugin.php.scanner;
 
 import com.buschmais.jqassistant.core.store.api.Store;
-import falk.php.model.PHPFileDescriptor;
-import falk.php.model.PHPLineDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 
 class PHPLineParser {
     private final Store store;

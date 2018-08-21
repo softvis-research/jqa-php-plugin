@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.scanner.parser;
+package org.jqassistant.contrib.plugin.php.model;
 
 /**
  *
  * @author falk
- * - super namespaces erkennen
  */
-public class PHPNameSpaceParser {
-    
-}
+enum VisibilityModifier
+        {
+           PROTECTED ,PUBLIC, PRIVATE, DEFAULT;
+        }

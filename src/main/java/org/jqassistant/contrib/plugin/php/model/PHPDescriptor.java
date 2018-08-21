@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.model;
+package org.jqassistant.contrib.plugin.php.model;
 
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.xo.api.annotation.Abstract;

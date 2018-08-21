@@ -2,11 +2,11 @@
         xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.0" name="Plaintext">
     <description>Provides a scanner for PHP files. Imports files line by line.</description>
     <model>
-        <class>falk.php.model.PHPDirectoryDescriptor</class>
-        <class>falk.php.model.PHPFileDescriptor</class>
-        <class>falk.php.model.PHPLineDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor</class>
     </model>
     <scanner>
-        <class>falk.php.scanner.PHPFileScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.php.scanner.PHPFileScannerPlugin</class>
     </scanner>
 </jqa-plugin:jqassistant-plugin>

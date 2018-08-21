@@ -1,4 +1,4 @@
-package falk.php;
+package org.jqassistant.contrib.plugin.php;
 
 import com.buschmais.jqassistant.core.scanner.api.DefaultScope;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
@@ -14,10 +14,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-import falk.php.model.PHPDirectoryDescriptor;
-import falk.php.model.PHPFileDescriptor;
-import falk.php.model.PHPLineDescriptor;
-import falk.php.scanner.PHPLexer;
+import org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
+import org.jqassistant.contrib.plugin.php.scanner.PHPLexer;
 import java.io.InputStream;
 
 /**
@@ -37,7 +37,7 @@ public class PHPScannerTest extends AbstractPluginIT
     
     @Test
     public void scanPHPFileTest() {
-        System.out.println("falk.PHPScannerPluginTest.scanPHPFileTest()");
+        System.out.println("org.jqassistant.contrib.plugin.php.scanPHPFileTest()");
          store.beginTransaction();
          
          ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
@@ -71,7 +71,7 @@ public class PHPScannerTest extends AbstractPluginIT
         File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
         assertTrue (testFile.exists());
        
-        falk.php.scanner.PHPLexer l = new falk.php.scanner.PHPLexer();
+        org.jqassistant.contrib.plugin.php.scanner.PHPLexer l = new org.jqassistant.contrib.plugin.php.scanner.PHPLexer();
         l.test(testFile);
     }
     

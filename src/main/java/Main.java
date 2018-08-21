@@ -1,5 +1,5 @@
 
-import falk.php.scanner.PHPLexer;
+import org.jqassistant.contrib.plugin.php.scanner.PHPLexer;
 import java.io.File;
 import java.io.InputStream;
 

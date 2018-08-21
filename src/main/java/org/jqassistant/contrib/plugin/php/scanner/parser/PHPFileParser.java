@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package falk.php.scanner.parser;
+package org.jqassistant.contrib.plugin.php.scanner.parser;
 
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
-import falk.php.model.PHPClass;
-import falk.php.model.PHPFileDescriptor;
-import falk.php.model.PHPFunction;
-import falk.php.model.PHPNamespace;
-import falk.php.model.PHPProperty;
+import org.jqassistant.contrib.plugin.php.model.PHPClass;
+import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunction;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
+import org.jqassistant.contrib.plugin.php.model.PHPProperty;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 
