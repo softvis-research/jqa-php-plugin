@@ -63,5 +63,21 @@ public class PHPScannerTest extends AbstractPluginIT
          
         store.commitTransaction();
     }
+    
+    @Test
+    public void scanPHPParserTest() {
+        System.out.println("org.jqassistant.contrib.plugin.php.scanPHPParserTest()");
+         store.beginTransaction();
+         
+         ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
+         File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
+          System.out.println(testFile.getAbsolutePath());
+          assertTrue (testFile.exists());
+          
+        //getScanner().scan(testFile, "/index.php", DefaultScope.NONE);
+         assertThat(getScanner().scan(testFile, "/class.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
+         
+        store.commitTransaction();
+    }
      
 }

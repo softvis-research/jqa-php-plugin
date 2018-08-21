@@ -45,8 +45,7 @@ public class PHPSourceParser {
             PhpParser parser = new PhpParser(tokenStream); 
             //parser.setBuildParseTree(true);      
             ParseTree tree = parser.htmlDocument();
-            System.err.println(tree.toStringTree(parser));
-            parseTreeOutput(tree, 0);
+            //System.err.println(tree.toStringTree(parser));
             
             PHPParserHelper.setStore(store);
             PHPFileParser a = new PHPFileParser();
@@ -58,20 +57,5 @@ public class PHPSourceParser {
       }
     }
     
-    protected void parseTreeOutput(ParseTree tree, int level){
-        int childCount = tree.getChildCount();
-        
-        String pad = "##############################".substring(0, level);
-        System.err.println(pad + " " + tree.getClass().getCanonicalName());
-        System.err.println(pad + " " + tree.getText());
-        
-        
-        for (int i = 0; i < childCount; i++) {
-            ParseTree childTree = tree.getChild(i);
-            
-            
-            
-            parseTreeOutput(childTree, level + 1);
-        }
-    }
+   
 }

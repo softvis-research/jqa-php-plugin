@@ -24,12 +24,41 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class PHPFileParser {
     
-    
+    protected PHPNamespace namespace;
+    protected PHPFileDescriptor fileDescriptor;
     
     public void parse(ParseTree tree, PHPFileDescriptor fileDescriptor){   
         
         System.out.println("org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser.parse()");
+        this.fileDescriptor = fileDescriptor;
+        parseTree(tree, 0);
         
+        
+    }
+    
+     protected void parseTree(ParseTree tree, int level){
+        
+        String pad = "########################################################################################################################".substring(0, level);
+        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        
+        switch (tree.getClass().getSimpleName()) {
+            case "QualifiedNamespaceNameContext":
+                namespace = (new PHPNameSpaceParser()).parse(tree);
+                return;
+            case "UseDeclarationContentListContext":
+                break;
+            case "ClassDeclarationContext":
+                //fileDescriptor.getClasses().add();
+                break;
+        }
+        
+        //offen: freie calls und functions
+        
+        int childCount = tree.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ParseTree childTree = tree.getChild(i);
+            parseTree(childTree, level + 1);
+        }
     }
    
     
