@@ -33,32 +33,19 @@ public class PHPLexer {
 
         
             Lexer lexer = new PhpLexer(CharStreams.fromStream(inputStream));
+
         
-//        Token t;
-//       
-//         while (( t = lexer.nextToken()).getType() != PhpLexer.EOF){
-//             if (t.getText().trim().length() == 0){
-//                 continue;
-//             }
-//             
-//             System.out.println("--> " + t.getText());
-//             System.out.println("1-> " + PhpLexer.tokenNames[t.getType()]);
-//        }
-        
-        TokenStream tokenStream = new CommonTokenStream(lexer);
-//        
-//        
-//        
-        PhpParser parser = new PhpParser(tokenStream);
-//        
-//        
-//        
-//         
-//            parser.setBuildParseTree(true);
-//            
-        ParseTree tree = parser.htmlDocument();
-        System.err.println(tree.toStringTree(parser));
-        parseTree(tree, 0);
+            TokenStream tokenStream = new CommonTokenStream(lexer);
+    //        
+    //        
+    //        
+            PhpParser parser = new PhpParser(tokenStream);
+    //         
+    //            parser.setBuildParseTree(true);
+    //            
+            ParseTree tree = parser.htmlDocument();
+            System.err.println(tree.toStringTree(parser));
+            parseTree(tree, 0);
         
         } catch (IOException e) {
          e.printStackTrace();

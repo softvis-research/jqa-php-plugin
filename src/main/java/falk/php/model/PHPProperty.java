@@ -6,6 +6,7 @@
 package falk.php.model;
 
 import com.buschmais.xo.neo4j.api.annotation.Label;
+import com.buschmais.xo.neo4j.api.annotation.Property;
 
 /**
  *
@@ -14,16 +15,15 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 @Label("Property")
 public interface PHPProperty extends PHPDescriptor  {
 
-    enum AccessIdentifiers
-        {
-           PROTECTED ,PUBLIC, PRIVATE;
-        }
-    
     String getName();
     void setName(String name);
     
-    AccessIdentifiers getAccess();
-    void setAccess(AccessIdentifiers parent);
+    @Property("visibility")
+    VisibilityModifier getVisibility();
+    void setVisibility(VisibilityModifier visibility);
 
+    @Property("static")
+    Boolean isStatic();
+    void setStatic(Boolean s);
     
 }

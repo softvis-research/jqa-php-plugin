@@ -19,12 +19,15 @@ public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileD
     @Relation("HAS_LINE")
     Set<PHPLineDescriptor> getLines();
     
+    @Relation("CONTAINS")
     List<PHPFunction> getFunctions();
     void setFunctions(List<PHPFunction> functions);
     
+    @Relation("CONTAINS")
     List<PHPClass> getClasses();
     void setClasses(List<PHPClass> classes);
     
+    @Relation("CONTAINS")
     List<PHPFunction> getCalls();
     void setCalls(List<PHPFunction> calls);
 }

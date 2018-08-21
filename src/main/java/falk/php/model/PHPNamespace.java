@@ -6,6 +6,7 @@
 package falk.php.model;
 
 import com.buschmais.xo.neo4j.api.annotation.Label;
+import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 /**
  *
@@ -17,6 +18,7 @@ public interface PHPNamespace extends PHPDescriptor {
     String getName();
     void setName(String name);
     
+    @Relation("CONTAINS")
     PHPNamespace getParent();
     void setParent(PHPNamespace parent);
     

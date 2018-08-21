@@ -6,6 +6,7 @@
 package falk.php.model;
 
 import com.buschmais.xo.neo4j.api.annotation.Label;
+import com.buschmais.xo.neo4j.api.annotation.Property;
 import java.util.List;
 
 /**
@@ -18,15 +19,17 @@ public interface PHPFunction extends PHPDescriptor {
     String getName();
     void setName(String name);
       
-    PHPClass getPHPClass();
-    void setPHPClass(PHPClass name);
-    
     int getLinesOfCode();
     void setLinesOfCode(int linesOfCode);
     
-    PHPFileDescriptor getFile();
-    void setFile(PHPFileDescriptor file);
-    
     List<PHPFunction> getCalls();
     void setCalls(List<PHPFunction> calls);
+    
+    @Property("visibility")
+    VisibilityModifier getVisibility();
+    void setVisibility(VisibilityModifier visibility);
+
+    @Property("static")
+    Boolean isStatic();
+    void setStatic(Boolean s);
 }

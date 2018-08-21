@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>falk.php</groupId>
-  <artifactId>php</artifactId>
+  <artifactId>jqa-php-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <name>php</name>

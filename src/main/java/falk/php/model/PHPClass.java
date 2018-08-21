@@ -15,36 +15,22 @@ import java.util.List;
  */
 @Label("Class")
 public interface PHPClass extends PHPDescriptor {
-    
-    /**
-     * Return the super class.
-     *
-     * @return The super class.
-     */
+
     @Relation("EXTENDS")
     PHPClass getSuperClass();
-
-    /**
-     * Set the super class.
-     *
-     * @param superClass
-     *            The super class.
-     */
     void setSuperClass(PHPClass superClass);
 
     String getName();
     void setName(String name);
     
-    PHPFileDescriptor getFile();
-    void setFile(PHPFileDescriptor file);
-    
     PHPNamespace getNamespace();
     void setNamespace(PHPNamespace namespace);
 
-
+    @Relation("HAS")
     List<PHPFunction> getMethods();
     void setMethods(List<PHPFunction> methods);
     
+    @Relation("HAS")
     List<PHPProperty> getProperties();
     void setProperties(List<PHPProperty> properties);
 }

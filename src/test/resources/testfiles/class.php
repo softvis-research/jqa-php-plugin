@@ -3,6 +3,7 @@
 namespace a\b;
 
 use x\y;
+use c\d as h;
 
 class index {
     
