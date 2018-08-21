@@ -7,6 +7,7 @@ package org.jqassistant.contrib.plugin.php.model;
 
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Property;
+import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 /**
@@ -18,13 +19,16 @@ public interface PHPFunction extends PHPDescriptor {
     
     String getName();
     void setName(String name);
-      
+    
+    @Property("linesOfCode")
     int getLinesOfCode();
     void setLinesOfCode(int linesOfCode);
     
+    @Relation("HAS_PARAMETERS")
     List<PHPFunctionParameter> getParameters();
     void setParameters(List<PHPFunctionParameter> parameters);
     
+    @Relation("HAS_CALLS")
     List<PHPFunction> getCalls();
     void setCalls(List<PHPFunction> calls);
     

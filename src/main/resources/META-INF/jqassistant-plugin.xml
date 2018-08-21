@@ -5,6 +5,13 @@
         <class>org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPClass</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFunction</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionParameter</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPInterface</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPNamespace</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPProperty</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPType</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.php.scanner.PHPFileScannerPlugin</class>

@@ -20,6 +20,7 @@ public interface PHPInterface extends PHPDescriptor, PHPType {
     PHPClass getSuperClass();
     void setSuperClass(PHPClass superClass);
 
+    @Relation("HAS_NAMESPACES")
     PHPNamespace getNamespace();
     void setNamespace(PHPNamespace namespace);
 

@@ -5,6 +5,7 @@
  */
 package org.jqassistant.contrib.plugin.php.model;
 
+import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
@@ -12,8 +13,8 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
  *
  * @author falk
  */
-@Label("Namespace")
-public interface PHPNamespace extends PHPDescriptor {
+@Label(value = "Namespace", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface PHPNamespace extends PHPDescriptor, FullQualifiedNameDescriptor {
     
     String getName();
     void setName(String name);

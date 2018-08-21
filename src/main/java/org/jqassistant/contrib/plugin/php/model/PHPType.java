@@ -21,11 +21,11 @@ public interface PHPType extends PHPDescriptor, FullQualifiedNameDescriptor {
     String getName();
     void setName(String name);
     
-    @Relation("HAS")
+    @Relation("HAS_METHODS")
     List<PHPFunction> getMethods();
     void setMethods(List<PHPFunction> methods);
     
-    @Relation("HAS")
+    @Relation("HAS_PROPERTIES")
     List<PHPProperty> getProperties();
     void setProperties(List<PHPProperty> properties);
 }

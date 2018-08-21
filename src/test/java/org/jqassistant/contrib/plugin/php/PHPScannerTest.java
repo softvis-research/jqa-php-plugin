@@ -18,6 +18,9 @@ import org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import java.io.InputStream;
+import org.jqassistant.contrib.plugin.php.model.PHPClass;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
+import java.util.Iterator;
 
 /**
  * Unit test for simple App.
@@ -80,4 +83,32 @@ public class PHPScannerTest extends AbstractPluginIT
         store.commitTransaction();
     }
      
+    @Test
+    public void StoreTest() {
+         System.out.println("org.jqassistant.contrib.plugin.php.StoreTest()");
+         store.beginTransaction();
+         
+         PHPClass v = store.create(PHPClass.class);
+          store.create(PHPClass.class);
+         v.setFullQualifiedName("test");
+         v.setName("blub");
+         // AbstractPluginIT.TestResult testResult;
+        
+//         testResult = query("MATCH (PHPClass:PHP:Class) RETURN PHPClass");
+//        List<PHPClass> phpClasses= testResult.getColumn("PHPClass");
+//        
+//         System.out.println(phpClasses.size());
+         
+//         for( Iterator<PHPClass> it = phpClasses.iterator(); it.hasNext(); )
+//        {
+//            PHPClass b = it.next();
+//            System.out.println(b.getFullQualifiedName());
+//        }
+         
+        //System.out.println("test find");
+        PHPClass f = store.find(PHPClass.class, "test");
+         assertThat(f.getName(), equalTo("blub"));
+        
+        store.commitTransaction();
+    }
 }
