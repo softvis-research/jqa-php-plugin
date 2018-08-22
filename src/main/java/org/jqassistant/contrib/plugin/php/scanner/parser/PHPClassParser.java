@@ -28,6 +28,7 @@ public class PHPClassParser {
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPClass phpClass;
+    protected boolean isAbstract = false;
     
     public PHPClassParser (Store store, PHPNamespace namespace, Map<String, PHPUse> useContext){
         this.useContext = useContext;
@@ -51,9 +52,16 @@ public class PHPClassParser {
             if(phpClass == null){
                 phpClass = store.create(PHPClass.class);
                 phpClass.setFullQualifiedName(fullname);
-                phpClass.setName(tree.getText());
                 phpClass.setNamespace(namespace);
                 System.err.println("ADD Class: " + fullname);
+            }
+            
+            phpClass.setName(tree.getText());
+            phpClass.setAbstract(isAbstract);
+        }
+        else if (phpClass == null && tree.getClass().getSimpleName().equals("ModifierContext")){
+            if(tree.getText().toLowerCase().equals("abstract")){
+                isAbstract = true;
             }
         }
         else if (phpClass != null && tree.getClass().getSimpleName().equals("ClassStatementContext")){
