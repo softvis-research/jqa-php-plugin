@@ -13,6 +13,10 @@ import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.model.PHPProperty;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
+import com.buschmais.jqassistant.core.store.api.Store;
+import java.util.HashMap;
+import java.util.Map;
+import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 
 /**
  *  - namespace erkennen
@@ -24,13 +28,20 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class PHPFileParser {
     
-    protected PHPNamespace namespace;
     protected PHPFileDescriptor fileDescriptor;
+    protected Store store;
+    protected PHPNamespace namespace;
+    protected Map<String, PHPUse> useContext = new HashMap<>();
     
-    public void parse(ParseTree tree, PHPFileDescriptor fileDescriptor){   
+    public PHPFileParser(Store store, PHPFileDescriptor fileDescriptor){
+        this.fileDescriptor = fileDescriptor;
+        this.store = store;
+    }
+    
+    public void parse(ParseTree tree){   
         
         System.out.println("org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser.parse()");
-        this.fileDescriptor = fileDescriptor;
+        
         parseTree(tree, 0);
         
         
@@ -38,18 +49,20 @@ public class PHPFileParser {
     
      protected void parseTree(ParseTree tree, int level){
         
-        String pad = "########################################################################################################################".substring(0, level);
-        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        //String pad = "########################################################################################################################".substring(0, level);
+        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         switch (tree.getClass().getSimpleName()) {
-            case "QualifiedNamespaceNameContext":
-                namespace = (new PHPNameSpaceParser()).parse(tree);
+            case "QualifiedNamespaceNameContext":               
+                namespace = (new PHPNameSpaceParser(store)).parse(tree);
                 return;
             case "UseDeclarationContentListContext":
-                break;
+                PHPUse u = (new PHPUseParser()).parse(tree);
+                useContext.put(u.alias, u);
+                return;
             case "ClassDeclarationContext":
-                //fileDescriptor.getClasses().add();
-                break;
+                fileDescriptor.getClasses().add((new PHPClassParser(store, namespace, useContext)).parse(tree));
+                return;
         }
         
         //offen: freie calls und functions

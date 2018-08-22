@@ -47,9 +47,8 @@ public class PHPSourceParser {
             ParseTree tree = parser.htmlDocument();
             //System.err.println(tree.toStringTree(parser));
             
-            PHPParserHelper.setStore(store);
-            PHPFileParser a = new PHPFileParser();
-            a.parse(tree, this.fileDescriptor);
+            PHPFileParser a = new PHPFileParser(store, this.fileDescriptor);
+            a.parse(tree);
         
         } catch (IOException e) {
          e.printStackTrace();
