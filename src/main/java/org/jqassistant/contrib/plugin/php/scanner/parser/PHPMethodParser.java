@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.model.PHPClass;
+import org.jqassistant.contrib.plugin.php.model.PHPType;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPMethod;
@@ -28,15 +29,15 @@ public class PHPMethodParser {
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPMethod phpMethod;
-    protected PHPClass phpClass;
+    protected PHPType phpClass;
     protected List<String> modifire; 
     
       
-    public PHPMethodParser (Store store, PHPClass phpClass){
+    public PHPMethodParser (Store store, PHPType phpClass){
         this(store, phpClass, new  HashMap<String, PHPUse>());
     }
     
-    public PHPMethodParser (Store store, PHPClass phpClass, Map<String, PHPUse> useContext){
+    public PHPMethodParser (Store store, PHPType phpClass, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.phpClass = phpClass;
         this.store = store;

@@ -5,7 +5,7 @@ namespace a\b;
 use x\y;
 use c\d as h;
 
-abstract class index {
+class index extends h implements o, \u\v {
     
     private $_p = 1;
     public static $prop;

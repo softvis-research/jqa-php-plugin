@@ -21,16 +21,4 @@ public interface PHPClass extends PHPDescriptor, PHPType {
     @Property("abstract")
     Boolean isAbstract();
     void setAbstract(Boolean isAbstract);
-
-    @Relation("EXTENDS")
-    PHPClass getSuperClass();
-    void setSuperClass(PHPClass superClass);
-
-    @Relation("HAS_NAMESPACES")
-    PHPNamespace getNamespace();
-    void setNamespace(PHPNamespace namespace);
-
-    @Relation("IMPEMENTS")
-    List<PHPInterface> getInterfaces();
-    void setInterfaces(List<PHPInterface> interfaces);
 }

@@ -28,4 +28,16 @@ public interface PHPType extends PHPDescriptor, FullQualifiedNameDescriptor {
     @Relation("HAS_PROPERTIES")
     List<PHPProperty> getProperties();
     void setProperties(List<PHPProperty> properties);
+    
+    @Relation("EXTENDS")
+    PHPClass getSuperClass();
+    void setSuperClass(PHPClass superClass);
+
+    @Relation("HAS_NAMESPACES")
+    PHPNamespace getNamespace();
+    void setNamespace(PHPNamespace namespace);
+
+    @Relation("IMPEMENTS")
+    List<PHPInterface> getInterfaces();
+    void setInterfaces(List<PHPInterface> interfaces);
 }

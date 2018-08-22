@@ -24,7 +24,7 @@ public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileD
     void setFunctions(List<PHPFunction> functions);
     
     @Relation("CONTAINS")
-    List<PHPClass> getClasses();
-    void setClasses(List<PHPClass> classes);
+    List<PHPType> getClasses();
+    void setClasses(List<PHPType> classes);
     
 }
