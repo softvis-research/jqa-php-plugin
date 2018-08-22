@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.model.PHPClass;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPFunction;
+import org.jqassistant.contrib.plugin.php.model.PHPMethod;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 
@@ -23,32 +23,31 @@ import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
  * @author falk
  * - calls erkennen
  */
-public class PHPFunctionParser {
+public class PHPMethodParser {
     protected PHPNamespace namespace;
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
-    protected PHPFunction phpFunction;
-    protected PHPNamespace phpNamespace;
+    protected PHPMethod phpMethod;
+    protected PHPClass phpClass;
     protected List<String> modifire; 
-
     
-    public PHPFunctionParser (Store store, PHPNamespace phpNamespace){
-        this(store, phpNamespace, new  HashMap<String, PHPUse>());
+      
+    public PHPMethodParser (Store store, PHPClass phpClass){
+        this(store, phpClass, new  HashMap<String, PHPUse>());
     }
     
-    public PHPFunctionParser (Store store, PHPNamespace phpNamespace, Map<String, PHPUse> useContext){
+    public PHPMethodParser (Store store, PHPClass phpClass, Map<String, PHPUse> useContext){
         this.useContext = useContext;
-        this.phpNamespace = phpNamespace;
+        this.phpClass = phpClass;
         this.store = store;
         
         modifire = new ArrayList<String>();
     }
     
-    public PHPFunction parse(ParseTree tree){
+    public PHPMethod parse(ParseTree tree){
         parseTree(tree, 1);
         
-        phpFunction = store.create(PHPFunction.class);
-        return phpFunction;
+        return phpMethod;
     }
     
     protected void parseTree(ParseTree tree, int level){
@@ -56,32 +55,32 @@ public class PHPFunctionParser {
         //String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
-        if(phpFunction == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
+        if(phpMethod == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
             String fullname = getFullQualifiedName(tree.getText());
-            phpFunction = store.find(PHPFunction.class, fullname);
-            if(phpFunction == null){
-                phpFunction = store.create(PHPFunction.class);
-                phpFunction.setFullQualifiedName(fullname);
-                phpFunction.setName(tree.getText());
-                System.err.println("ADD Function: " + fullname);
+            phpMethod = store.find(PHPMethod.class, fullname);
+            if(phpMethod == null){
+                phpMethod = store.create(PHPMethod.class);
+                phpMethod.setFullQualifiedName(fullname);
+                phpMethod.setName(tree.getText());
+                System.err.println("ADD Method: " + fullname);
             }
             
-            phpFunction.setParametersCount(0);
-            phpFunction.setLinesOfCode(0);
+            phpMethod.setParametersCount(0);
+            phpMethod.setLinesOfCode(0);
             
             for (int i = 0; i < modifire.size(); i++) {
                 switch (modifire.get(i)){
                     case "static":
-                        phpFunction.setStatic(Boolean.TRUE);
+                        phpMethod.setStatic(Boolean.TRUE);
                         break;
                     case "private":
-                        phpFunction.setVisibility(VisibilityModifier.PRIVATE);
+                        phpMethod.setVisibility(VisibilityModifier.PRIVATE);
                         break;
                     case "protected":
-                        phpFunction.setVisibility(VisibilityModifier.PROTECTED);
+                        phpMethod.setVisibility(VisibilityModifier.PROTECTED);
                         break;
                     case "public":
-                        phpFunction.setVisibility(VisibilityModifier.PUBLIC);
+                        phpMethod.setVisibility(VisibilityModifier.PUBLIC);
                         break;
                 }
             }
@@ -97,12 +96,12 @@ public class PHPFunctionParser {
                     parameterCount++;
                  }
             }
-            phpFunction.setParametersCount(parameterCount);
+            phpMethod.setParametersCount(parameterCount);
             return;
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
-            phpFunction.setLinesOfCode(countBodyLines(tree, 0));
-            (new PHPReferenceParser(store, phpFunction, namespace, useContext)).parse(tree);
+            phpMethod.setLinesOfCode(countBodyLines(tree, 0));
+            (new PHPReferenceParser(store, phpMethod, namespace, useContext)).parse(tree);
             return;
         }
         
@@ -118,6 +117,9 @@ public class PHPFunctionParser {
             linesOfCode++;
         }
         
+        //String pad = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB".substring(0, linesOfCode);
+        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
             linesOfCode += countBodyLines(tree.getChild(i), 0);
@@ -127,16 +129,16 @@ public class PHPFunctionParser {
     }
     
      protected String getFullQualifiedName(String Name){
-        String fullname = Name.toLowerCase();
+        String namespace = Name.toLowerCase();
         
-        if (namespace != null){
-            PHPNamespace parent = namespace;
-            while(parent != null){
-                fullname = parent.getName().toLowerCase() + "|" + fullname;
-                parent = parent.getParent();
-            }
+
+        namespace = phpClass.getName().toLowerCase() + "|" + namespace;
+        PHPNamespace parent = phpClass.getNamespace();
+        while(parent != null){
+            namespace = parent.getName().toLowerCase() + "|" + namespace;
+            parent = parent.getParent();
         }
-        
-        return "FUNCTION|" + fullname;
+        return "METHOD|" + namespace;
+
     }
 }

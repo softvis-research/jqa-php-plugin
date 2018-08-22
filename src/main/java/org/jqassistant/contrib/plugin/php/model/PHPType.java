@@ -22,8 +22,8 @@ public interface PHPType extends PHPDescriptor, FullQualifiedNameDescriptor {
     void setName(String name);
     
     @Relation("HAS_METHODS")
-    List<PHPFunction> getMethods();
-    void setMethods(List<PHPFunction> methods);
+    List<PHPMethod> getMethods();
+    void setMethods(List<PHPMethod> methods);
     
     @Relation("HAS_PROPERTIES")
     List<PHPProperty> getProperties();

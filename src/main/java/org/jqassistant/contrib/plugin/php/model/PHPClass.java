@@ -17,15 +17,15 @@ import java.util.List;
 @Label(value = "Class", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
 public interface PHPClass extends PHPDescriptor, PHPType {
 
-    @Relation("EXTENDS")
-    PHPClass getSuperClass();
-    void setSuperClass(PHPClass superClass);
+//    @Relation("EXTENDS")
+//    PHPClass getSuperClass();
+//    void setSuperClass(PHPClass superClass);
 
     @Relation("HAS_NAMESPACES")
     PHPNamespace getNamespace();
     void setNamespace(PHPNamespace namespace);
 
-    @Relation("IMPEMENTS")
-    List<PHPInterface> getInterfaces();
-    void setInterfaces(List<PHPInterface> interfaces);
+//    @Relation("IMPEMENTS")
+//    List<PHPInterface> getInterfaces();
+//    void setInterfaces(List<PHPInterface> interfaces);
 }

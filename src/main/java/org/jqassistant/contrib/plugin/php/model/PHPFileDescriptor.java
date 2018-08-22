@@ -14,7 +14,7 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 @Label("File")
-public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileDescriptor {
+public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileDescriptor, PHPCalling {
 
     @Relation("HAS_LINE")
     Set<PHPLineDescriptor> getLines();
@@ -27,7 +27,4 @@ public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileD
     List<PHPClass> getClasses();
     void setClasses(List<PHPClass> classes);
     
-//    @Relation("CONTAINS")
-//    List<PHPFunction> getCalls();
-//    void setCalls(List<PHPFunction> calls);
 }

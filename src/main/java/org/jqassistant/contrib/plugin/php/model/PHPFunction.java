@@ -16,28 +16,10 @@ import java.util.List;
  * @author falk
  */
 @Label(value = "Function", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPFunction extends PHPDescriptor, FullQualifiedNameDescriptor {
+public interface PHPFunction extends PHPDescriptor, PHPMethod, FullQualifiedNameDescriptor {
     
-    String getName();
-    void setName(String name);
-    
-    @Property("linesOfCode")
-    int getLinesOfCode();
-    void setLinesOfCode(int linesOfCode);
-    
-    @Property("count_of_parameters")
-    Integer getParametersCount();
-    void setParametersCount(Integer parametersCount);
-    
-//    @Relation("HAS_CALLS")
-//    List<PHPFunction> getCalls();
-//    void setCalls(List<PHPFunction> calls);
-    
-    @Property("visibility")
-    VisibilityModifier getVisibility();
-    void setVisibility(VisibilityModifier visibility);
+    @Relation("HAS_NAMESPACES")
+    PHPNamespace getNamespace();
+    void setNamespace(PHPNamespace namespace);
 
-    @Property("static")
-    Boolean isStatic();
-    void setStatic(Boolean s);
 }

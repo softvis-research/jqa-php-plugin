@@ -32,6 +32,7 @@ public class PHPFileParser {
     protected Store store;
     protected PHPNamespace namespace;
     protected Map<String, PHPUse> useContext = new HashMap<>();
+    PHPReferenceParser referenceParser;
     
     public PHPFileParser(Store store, PHPFileDescriptor fileDescriptor){
         this.fileDescriptor = fileDescriptor;
@@ -41,20 +42,14 @@ public class PHPFileParser {
     public void parse(ParseTree tree){   
         
         System.out.println("org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser.parse()");
-        
+        referenceParser = new PHPReferenceParser(store, fileDescriptor, namespace, useContext);
+       
         parseTree(tree, 0);
         
         
     }
     
      protected void parseTree(ParseTree tree, int level){
-        
-        
-//        if(tree.getClass().getSimpleName().equals("TopStatementContext")){
-//            for (int i = 0; i < tree.getChildCount(); i++) {
-//                
-//            }
-//        }
         
         switch (tree.getClass().getSimpleName()) {
             case "QualifiedNamespaceNameContext":               
@@ -68,13 +63,17 @@ public class PHPFileParser {
                 fileDescriptor.getClasses().add((new PHPClassParser(store, namespace, useContext)).parse(tree));
                 return;
             case "FunctionDeclarationContext":
-                fileDescriptor.getFunctions().add((new PHPFunctionParser(store, fileDescriptor)).parse(tree));
+                fileDescriptor.getFunctions().add((new PHPFunctionParser(store, namespace, useContext)).parse(tree));
                 return;
             case "AssignmentExpressionContext":
-                System.out.println("TODO: Ausdruck verarbeiten: " + tree.getText());
+                referenceParser.setNamespace(namespace);
+                referenceParser.setUseContext(useContext);
+                referenceParser.parse(tree);
                 return;
             case "ChainExpressionContext":
-                System.out.println("TODO: Ausdruck verarbeiten: " + tree.getText());
+                referenceParser.setNamespace(namespace);
+                referenceParser.setUseContext(useContext);
+                referenceParser.parse(tree);
                 return;
         }
         
