@@ -62,7 +62,7 @@ public class PHPClassParser {
                     break;
                 }
                 else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
-                    phpClass.getMethods().add((new PHPFunctionParser(store)).parse(tree));
+                    phpClass.getMethods().add((new PHPFunctionParser(store, phpClass)).parse(tree));
                     break;
                 }
             }

@@ -25,13 +25,13 @@ public interface PHPFunction extends PHPDescriptor, FullQualifiedNameDescriptor 
     int getLinesOfCode();
     void setLinesOfCode(int linesOfCode);
     
-    @Relation("HAS_PARAMETERS")
+    @Property("count_of_parameters")
     Integer getParametersCount();
     void setParametersCount(Integer parametersCount);
     
-    @Relation("HAS_CALLS")
-    List<PHPFunction> getCalls();
-    void setCalls(List<PHPFunction> calls);
+//    @Relation("HAS_CALLS")
+//    List<PHPFunction> getCalls();
+//    void setCalls(List<PHPFunction> calls);
     
     @Property("visibility")
     VisibilityModifier getVisibility();

@@ -68,7 +68,7 @@ public class PHPFileParser {
                 fileDescriptor.getClasses().add((new PHPClassParser(store, namespace, useContext)).parse(tree));
                 return;
             case "FunctionDeclarationContext":
-                System.out.println("TODO: freie Funktionen einlesen: " + tree.getText());
+                fileDescriptor.getFunctions().add((new PHPFunctionParser(store, fileDescriptor)).parse(tree));
                 return;
             case "AssignmentExpressionContext":
                 System.out.println("TODO: Ausdruck verarbeiten: " + tree.getText());
