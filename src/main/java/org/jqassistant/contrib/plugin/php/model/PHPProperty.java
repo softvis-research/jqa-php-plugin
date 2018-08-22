@@ -25,5 +25,5 @@ public interface PHPProperty extends PHPDescriptor  {
     @Property("static")
     Boolean isStatic();
     void setStatic(Boolean s);
-    
+   
 }

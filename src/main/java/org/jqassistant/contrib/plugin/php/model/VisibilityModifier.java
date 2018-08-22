@@ -9,7 +9,7 @@ package org.jqassistant.contrib.plugin.php.model;
  *
  * @author falk
  */
-enum VisibilityModifier
+public enum VisibilityModifier
         {
            PROTECTED ,PUBLIC, PRIVATE, DEFAULT;
         }

@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPClass;
+import org.jqassistant.contrib.plugin.php.model.PHPProperty;
 
 /**
  *
@@ -33,7 +34,7 @@ public class PHPClassParser {
         this.store = store;
     }
     
-    protected PHPClass parse(ParseTree tree){
+    public PHPClass parse(ParseTree tree){
         parseTree(tree, 1);
         return phpClass;
     }
@@ -57,20 +58,15 @@ public class PHPClassParser {
         else if (phpClass != null && tree.getClass().getSimpleName().equals("ClassStatementContext")){
             for (int i = 0; i < tree.getChildCount(); i++) {
                 if(tree.getChild(i).getClass().getSimpleName().equals("VariableInitializerContext")){
-                    //phpClass.getProperties().add();
-                    System.out.println("TODO: Parse propery: " + tree.getText());
+                    phpClass.getProperties().add((new PHPPropertyParser(store)).parse(tree));
                     break;
                 }
                 else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
-                    System.out.println("TODO: Parse Methode: " + tree.getText());
+                    phpClass.getMethods().add((new PHPFunctionParser(store)).parse(tree));
+                    break;
                 }
             }
-            //"AttributesContext" "VariableInitializerContext"
         }
-        
-        
-        //"IdentifierContext"
-        //        "TerminalNodeImpl"
         
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
