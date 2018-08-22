@@ -49,8 +49,12 @@ public class PHPFileParser {
     
      protected void parseTree(ParseTree tree, int level){
         
-        //String pad = "########################################################################################################################".substring(0, level);
-        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        
+//        if(tree.getClass().getSimpleName().equals("TopStatementContext")){
+//            for (int i = 0; i < tree.getChildCount(); i++) {
+//                
+//            }
+//        }
         
         switch (tree.getClass().getSimpleName()) {
             case "QualifiedNamespaceNameContext":               
@@ -63,9 +67,21 @@ public class PHPFileParser {
             case "ClassDeclarationContext":
                 fileDescriptor.getClasses().add((new PHPClassParser(store, namespace, useContext)).parse(tree));
                 return;
+            case "FunctionDeclarationContext":
+                System.out.println("TODO: freie Funktionen einlesen: " + tree.getText());
+                return;
+            case "AssignmentExpressionContext":
+                System.out.println("TODO: Ausdruck verarbeiten: " + tree.getText());
+                return;
+            case "ChainExpressionContext":
+                System.out.println("TODO: Ausdruck verarbeiten: " + tree.getText());
+                return;
         }
         
-        //offen: freie calls und functions
+        
+        //String pad = "########################################################################################################################".substring(0, level);
+        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        
         
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {

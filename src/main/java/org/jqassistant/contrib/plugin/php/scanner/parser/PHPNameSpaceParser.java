@@ -54,7 +54,7 @@ public class PHPNameSpaceParser {
                 n.setName(tree.getText());
                 n.setParent(parentNamespace);
                 parentNamespace = n;
-                System.err.println("ADD Namespace:" + fullname);
+                System.err.println("ADD Namespace: " + fullname);
             }
         }
         

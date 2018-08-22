@@ -5,6 +5,7 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser.helper;
 
+
 /**
  *
  * @author falk
@@ -14,4 +15,17 @@ public class PHPUse {
     public PHPUse parent = null;
     public String name = "";
     public String alias = "";
+    
+     public String getFullQualifiedName(){
+        String namespace = name.toLowerCase();
+        
+        while(parent != null){
+            namespace = parent.name.toLowerCase() + "|" + namespace;
+            parent = parent.parent;
+        }
+        
+       
+        
+        return "USE|" + namespace + " AS " + alias;
+    }
 }

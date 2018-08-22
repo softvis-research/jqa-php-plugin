@@ -51,9 +51,24 @@ public class PHPClassParser {
                 phpClass.setFullQualifiedName(fullname);
                 phpClass.setName(tree.getText());
                 phpClass.setNamespace(namespace);
-                System.err.println("ADD Class:" + fullname);
+                System.err.println("ADD Class: " + fullname);
             }
         }
+        else if (phpClass != null && tree.getClass().getSimpleName().equals("ClassStatementContext")){
+            for (int i = 0; i < tree.getChildCount(); i++) {
+                if(tree.getChild(i).getClass().getSimpleName().equals("VariableInitializerContext")){
+                    //phpClass.getProperties().add();
+                    System.out.println("TODO: Parse propery: " + tree.getText());
+                    break;
+                }
+                else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
+                    System.out.println("TODO: Parse Methode: " + tree.getText());
+                }
+            }
+            //"AttributesContext" "VariableInitializerContext"
+        }
+        
+        
         //"IdentifierContext"
         //        "TerminalNodeImpl"
         

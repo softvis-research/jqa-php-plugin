@@ -19,7 +19,6 @@ import org.jqassistant.contrib.plugin.php.PhpParser;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
-import org.jqassistant.contrib.plugin.php.scanner.parser.PHPParserHelper;
 
 /**
  *
@@ -50,7 +49,7 @@ public class PHPSourceParser {
             PHPFileParser a = new PHPFileParser(store, this.fileDescriptor);
             a.parse(tree);
         
-        } catch (IOException e) {
+        } catch (Exception e) {
          e.printStackTrace();
          System.out.println(e);
       }

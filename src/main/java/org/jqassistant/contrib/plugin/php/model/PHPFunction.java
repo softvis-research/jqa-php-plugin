@@ -25,8 +25,8 @@ public interface PHPFunction extends PHPDescriptor {
     void setLinesOfCode(int linesOfCode);
     
     @Relation("HAS_PARAMETERS")
-    List<PHPFunctionParameter> getParameters();
-    void setParameters(List<PHPFunctionParameter> parameters);
+    Integer getParametersCount();
+    void setParametersCount(Integer parametersCount);
     
     @Relation("HAS_CALLS")
     List<PHPFunction> getCalls();
