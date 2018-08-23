@@ -22,11 +22,11 @@ import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 public class PHPNameSpaceParser {
     
     protected PHPNamespace parentNamespace;
-    protected Store store;
     protected Boolean start = false;
+    protected Helper helper;
     
     public PHPNameSpaceParser (Store store){
-        this.store = store;
+        helper = new Helper(store);
     }
     
     protected PHPNamespace parse(ParseTree tree){
@@ -46,16 +46,7 @@ public class PHPNameSpaceParser {
             start = true;
         }
         if(start && tree.getClass().getSimpleName().equals( "IdentifierContext")){
-            String fullname = setFullQualifiedName(parentNamespace, tree.getText());
-            PHPNamespace n = store.find(PHPNamespace.class, fullname);
-            if(n == null){
-                n = store.create(PHPNamespace.class);
-                n.setFullQualifiedName(fullname);
-                n.setName(tree.getText());
-                n.setParent(parentNamespace);
-                parentNamespace = n;
-                System.err.println("ADD Namespace: " + fullname);
-            }
+            parentNamespace = helper.getNamespace(tree.getText(), parentNamespace);
         }
         
         int childCount = tree.getChildCount();
@@ -65,16 +56,5 @@ public class PHPNameSpaceParser {
         }
         
         return null;
-    }
-    
-    protected String setFullQualifiedName(PHPNamespace parent, String Name){
-        String namespace = Name.toLowerCase();
-        
-        while(parent != null){
-            namespace = parent.getName().toLowerCase() + "|" + namespace;
-            parent = parent.getParent();
-        }
-        
-        return "NAMESPACE|" + namespace;
     }
 }

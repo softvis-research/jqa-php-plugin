@@ -19,9 +19,10 @@ public class PHPUse {
      public String getFullQualifiedName(){
         String namespace = name.toLowerCase();
         
-        while(parent != null){
-            namespace = parent.name.toLowerCase() + "|" + namespace;
-            parent = parent.parent;
+        PHPUse p = parent;
+        while(p != null){
+            namespace = p.name.toLowerCase() + "|" + namespace;
+            p = p.parent;
         }
         
        

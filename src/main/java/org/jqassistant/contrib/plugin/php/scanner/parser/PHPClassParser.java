@@ -33,11 +33,13 @@ public class PHPClassParser {
     protected PHPType phpClass;
     protected boolean isAbstract = false;
     protected boolean isInterface = false;
+    protected Helper helper;
     
     public PHPClassParser (Store store, PHPNamespace namespace, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.namespace = namespace;
         this.store = store;
+        this.helper = new Helper(store);
     }
     
     public PHPType parse(ParseTree tree){
@@ -51,28 +53,12 @@ public class PHPClassParser {
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpClass == null && tree.getClass().getSimpleName().equals("IdentifierContext")) {
-            String fullname = setFullQualifiedName(namespace, tree.getText());
             if (isInterface){
-                phpClass = store.find(PHPInterface.class, fullname);
-                if(phpClass == null){
-                    phpClass = store.create(PHPInterface.class);
-                    phpClass.setFullQualifiedName(fullname);
-                    phpClass.setNamespace(namespace);
-                    System.err.println("ADD Interface: " + fullname);
-                }
+                phpClass = helper.getInterface(tree.getText(), namespace);
             } else {
-                phpClass = store.find(PHPClass.class, fullname);
-                if(phpClass == null){
-                    phpClass = store.create(PHPClass.class);
-                    phpClass.setFullQualifiedName(fullname);
-                    phpClass.setNamespace(namespace);
-                    System.err.println("ADD Class: " + fullname);
-                }
-                
+                phpClass = helper.getClass(tree.getText(), namespace);
                 phpClass.as(PHPClass.class).setAbstract(isAbstract);
             }
-            
-            phpClass.setName(tree.getText());
         }
         else if (phpClass == null && tree.getClass().getSimpleName().equals("ModifierContext")){
             if(tree.getText().toLowerCase().equals("abstract")){
@@ -114,16 +100,5 @@ public class PHPClassParser {
         for (int i = 0; i < childCount; i++) {
             parseTree(tree.getChild(i), level + 1, i);
         }
-    }
-    
-     protected String setFullQualifiedName(PHPNamespace parent, String Name){
-        String namespace = Name.toLowerCase();
-        
-        while(parent != null){
-            namespace = parent.getName().toLowerCase() + "|" + namespace;
-            parent = parent.getParent();
-        }
-        
-        return "CLASS|" + namespace;
     }
 }
