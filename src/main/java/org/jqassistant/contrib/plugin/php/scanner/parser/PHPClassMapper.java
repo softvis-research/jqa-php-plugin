@@ -16,6 +16,7 @@ import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import java.util.List;
 import org.jqassistant.contrib.plugin.php.model.PHPInterface;
 import org.jqassistant.contrib.plugin.php.model.PHPClass;
+import org.jqassistant.contrib.plugin.php.model.PHPTrait;
 
 /**
  *
@@ -24,14 +25,14 @@ import org.jqassistant.contrib.plugin.php.model.PHPClass;
 public class PHPClassMapper {
     
     protected PHPType phpClass;
-    protected boolean mapInterfaces;
+    protected String mapType = "superclass";
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected Helper helper;
     
-    public PHPClassMapper(Store store, PHPType phpClass, boolean mapInterfaces, Map<String, PHPUse> useContext ){
+    public PHPClassMapper(Store store, PHPType phpClass, String mapType, Map<String, PHPUse> useContext ){
         this.phpClass = phpClass;
-        this.mapInterfaces = mapInterfaces;
+        this.mapType = mapType;
         this.useContext = useContext;
         this.helper = new Helper(store);
     }
@@ -120,13 +121,17 @@ public class PHPClassMapper {
             n = helper.getNamespace(namelist.get(i), n);
         }
         
-        if (mapInterfaces){
+        if (mapType.equals("interface")){
             PHPInterface i = helper.getInterface(namelist.get(namelist.size() -1), n);
             phpClass.getInterfaces().add(i);
         }
-        else {
+        else if (mapType.equals("superclass")) {
             PHPClass c = helper.getClass(namelist.get(namelist.size() -1), n);
             phpClass.setSuperClass(c);
+        }
+        else if (mapType.equals("trait")) {
+            PHPTrait c = helper.getTrait(namelist.get(namelist.size() -1), n);
+            phpClass.as(PHPClass.class).getTraits().add(c);
         }
     }
     

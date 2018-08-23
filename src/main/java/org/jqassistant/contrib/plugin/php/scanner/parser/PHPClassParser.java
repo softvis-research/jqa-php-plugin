@@ -32,7 +32,7 @@ public class PHPClassParser {
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPType phpClass;
     protected boolean isAbstract = false;
-    protected boolean isInterface = false;
+    protected String type = "class";
     protected Helper helper;
     
     public PHPClassParser (Store store, PHPNamespace namespace, Map<String, PHPUse> useContext){
@@ -49,12 +49,15 @@ public class PHPClassParser {
     
     protected void parseTree(ParseTree tree, int level, int idx){
         
-        //String pad = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC".substring(0, level);
-        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+//        String pad = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC".substring(0, level);
+//        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpClass == null && tree.getClass().getSimpleName().equals("IdentifierContext")) {
-            if (isInterface){
+            if (type.equals("interface")){
                 phpClass = helper.getInterface(tree.getText(), namespace);
+            }
+            else if (type.equals("trait")){
+                phpClass = helper.getTrait(tree.getText(), namespace);
             } else {
                 phpClass = helper.getClass(tree.getText(), namespace);
                 phpClass.as(PHPClass.class).setAbstract(isAbstract);
@@ -67,7 +70,10 @@ public class PHPClassParser {
         }
         else if (phpClass == null && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("interface")){
-                isInterface = true;
+                type = "interface";
+            }
+            else if(tree.getText().toLowerCase().equals("trait")){
+                type = "trait";
             }
         }
         else if (phpClass != null && tree.getClass().getSimpleName().equals("ClassStatementContext")){
@@ -83,19 +89,22 @@ public class PHPClassParser {
             }
         }
         else if(phpClass != null && tree.getClass().getSimpleName().equals("InterfaceListContext")){
-            (new PHPClassMapper(store, phpClass, true, useContext)).parse(tree);
+            (new PHPClassMapper(store, phpClass, "interface", useContext)).parse(tree);
             return;
         }
         else if(phpClass != null && level == 2 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("extends")){
-                (new PHPClassMapper(store, phpClass, false, useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPClassMapper(store, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
-            }            
+            }
+        }
+        else if(phpClass != null && level == 3 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
+            if(tree.getText().toLowerCase().equals("use")){
+                (new PHPClassMapper(store, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
+                return;
+            }
         }
        
-        
-        //level = 2 && "TerminalNodeImpl" == extends --> 
-        
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
             parseTree(tree.getChild(i), level + 1, i);

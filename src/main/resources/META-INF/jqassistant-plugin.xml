@@ -12,6 +12,7 @@
         <class>org.jqassistant.contrib.plugin.php.model.PHPNamespace</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPProperty</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPType</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPTrait</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.php.scanner.PHPFileScannerPlugin</class>

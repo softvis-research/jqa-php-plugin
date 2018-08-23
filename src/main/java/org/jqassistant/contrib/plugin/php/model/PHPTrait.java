@@ -15,14 +15,7 @@ import java.util.List;
  *
  * @author falk
  */
-@Label(value = "Class", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPClass extends PHPDescriptor, PHPType {
-    
-    @Property("abstract")
-    Boolean isAbstract();
-    void setAbstract(Boolean isAbstract);
-    
-    @Relation("TRAITS")
-    List<PHPTrait> getTraits();
-    void setTraits(List<PHPTrait> traits);
+@Label(value = "Trait", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface PHPTrait extends PHPDescriptor, PHPType {
+
 }
