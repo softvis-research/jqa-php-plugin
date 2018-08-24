@@ -49,12 +49,21 @@ public class PHPFileParser {
      protected void parseTree(ParseTree tree, int level){
         
         switch (tree.getClass().getSimpleName()) {
-            case "QualifiedNamespaceNameContext":               
-                namespace = (new PHPNameSpaceParser(store)).parse(tree);
-                return;
             case "UseDeclarationContentListContext":
                 PHPUse u = (new PHPUseParser()).parse(tree);
                 useContext.put(u.alias, u);
+                System.out.println("TEMP Use: " + u.getFullQualifiedName());
+                return;
+            case "QualifiedNamespaceNameContext":
+                if(tree.getText().toLowerCase().startsWith("use")){
+                    //BUGFIX: Parser ident Use with relative namespace as namespace stats with 'use'
+                    PHPUse u2 = (new PHPUseParser()).skipFirst().parse(tree);
+                    System.out.println("TEMP Use: " + u2.getFullQualifiedName());
+                    useContext.put(u2.alias, u2);
+                }
+                else {
+                    namespace = (new PHPNameSpaceParser(store)).parse(tree);
+                }
                 return;
             case "ClassDeclarationContext":
                 fileDescriptor.getClasses().add((new PHPTypeParser(store, namespace, useContext)).parse(tree));

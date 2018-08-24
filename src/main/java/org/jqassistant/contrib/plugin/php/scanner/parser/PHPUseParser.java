@@ -22,9 +22,19 @@ public class PHPUseParser {
     protected PHPUse parentUse;
     protected Boolean start = false;
     protected Boolean nextisAlias = false; 
+    protected boolean skipFirst = false;
     
     public PHPUseParser (){
         
+    }
+    
+    /**
+     * by parsing, skip first entity
+     * @return this
+     */
+    public PHPUseParser skipFirst(){
+        skipFirst = true;
+        return this;
     }
     
     /**
@@ -35,7 +45,6 @@ public class PHPUseParser {
     protected PHPUse parse(ParseTree tree){
         start = false;
         parseTree(tree, 10);
-        System.out.println("TEMP Use: " + parentUse.getFullQualifiedName());
         return parentUse;
     }
     
@@ -53,11 +62,15 @@ public class PHPUseParser {
             start = true;
         }
         if(start && !nextisAlias && tree.getClass().getSimpleName().equals( "IdentifierContext")){
+            if(skipFirst){
+                skipFirst = false;
+            } else {
             PHPUse n = new PHPUse();
               n.name = tree.getText();
               n.alias = n.name;
               n.parent = parentUse;
               parentUse = n;
+            }
         }
         else if (start && tree.getClass().getSimpleName().equals( "TerminalNodeImpl") && tree.getText().toLowerCase().equals("as")){
             nextisAlias = true;

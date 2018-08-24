@@ -79,12 +79,15 @@ public class PHPScannerTest extends AbstractPluginIT
 //        testFile = new File(classLoader.getResource("testfiles/impl_ext.php").getFile());
 //         assertThat(getScanner().scan(testFile, "/impl_ext.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
          
-         testFile = new File(classLoader.getResource("testfiles/interface.php").getFile());
-         assertThat(getScanner().scan(testFile, "/interface.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-         
+//         testFile = new File(classLoader.getResource("testfiles/interface.php").getFile());
+//         assertThat(getScanner().scan(testFile, "/interface.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
+//         
 //        testFile = new File(classLoader.getResource("testfiles/trait.php").getFile());
 //         assertThat(getScanner().scan(testFile, "/trait.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
         
+        testFile = new File(classLoader.getResource("testfiles/challenge.php").getFile());
+         assertThat(getScanner().scan(testFile, "/challenge.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
+         
         store.commitTransaction();
     }
      
