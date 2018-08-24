@@ -11,61 +11,61 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPFunction;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 
 /**
- *
+ * parse subtree and detect function characteristics 
  * @author falk
- * - calls erkennen
  */
 public class PHPFunctionParser {
-    protected PHPNamespace namespace;
-    protected Store store;
+    protected PHPNamespaceDescriptor namespace;
+    protected Helper helper;
     protected Map<String, PHPUse> useContext = new HashMap<>();
-    protected PHPFunction phpFunction;
-    protected PHPNamespace phpNamespace;
+    protected PHPFunctionDescriptor phpFunction;
+    protected PHPNamespaceDescriptor phpNamespace;
     protected List<String> modifire; 
 
     
-    public PHPFunctionParser (Store store, PHPNamespace phpNamespace){
+    public PHPFunctionParser (Store store, PHPNamespaceDescriptor phpNamespace){
         this(store, phpNamespace, new  HashMap<String, PHPUse>());
     }
     
-    public PHPFunctionParser (Store store, PHPNamespace phpNamespace, Map<String, PHPUse> useContext){
+    public PHPFunctionParser (Store store, PHPNamespaceDescriptor phpNamespace, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.phpNamespace = phpNamespace;
-        this.store = store;
+        this.helper = new Helper(store);
         
         modifire = new ArrayList<String>();
     }
     
-    public PHPFunction parse(ParseTree tree){
+    /**
+     * parse tree and return the php function
+     * @param tree
+     * @return PHPFunctionDescriptor
+     */
+    public PHPFunctionDescriptor parse(ParseTree tree){
         parseTree(tree, 1);
         
-        phpFunction = store.create(PHPFunction.class);
         return phpFunction;
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
     protected void parseTree(ParseTree tree, int level){
         
         //String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpFunction == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
-            String fullname = getFullQualifiedName(tree.getText());
-            phpFunction = store.find(PHPFunction.class, fullname);
-            if(phpFunction == null){
-                phpFunction = store.create(PHPFunction.class);
-                phpFunction.setFullQualifiedName(fullname);
-                phpFunction.setName(tree.getText());
-                System.err.println("ADD Function: " + fullname);
-            }
-            
+            phpFunction = helper.getFunction(tree.getText(), namespace);
             phpFunction.setParametersCount(0);
             phpFunction.setLinesOfCode(0);
             
@@ -102,7 +102,6 @@ public class PHPFunctionParser {
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
             phpFunction.setLinesOfCode(countBodyLines(tree, 0));
-            (new PHPReferenceParser(store, phpFunction, namespace, useContext)).parse(tree);
             return;
         }
         
@@ -124,19 +123,5 @@ public class PHPFunctionParser {
         }
         
         return linesOfCode;
-    }
-    
-     protected String getFullQualifiedName(String Name){
-        String fullname = Name.toLowerCase();
-        
-        if (namespace != null){
-            PHPNamespace parent = namespace;
-            while(parent != null){
-                fullname = parent.getName().toLowerCase() + "|" + fullname;
-                parent = parent.getParent();
-            }
-        }
-        
-        return "FUNCTION|" + fullname;
     }
 }

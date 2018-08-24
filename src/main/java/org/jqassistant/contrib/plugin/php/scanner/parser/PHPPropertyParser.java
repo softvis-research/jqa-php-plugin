@@ -7,32 +7,40 @@ package org.jqassistant.contrib.plugin.php.scanner.parser;
 
 import com.buschmais.jqassistant.core.store.api.Store;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPProperty;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 
 /**
- *
+ * parse subtree and detect property characteristics 
  * @author falk
  */
 public class PHPPropertyParser {
-    protected Store store;
-    protected PHPProperty phpProperty;
+    protected Helper helper;
+    protected PHPPropertyDescriptor phpProperty;
     
     public PHPPropertyParser (Store store){
-        this.store = store;
+        this.helper = new Helper(store);
     }
     
-    public PHPProperty parse(ParseTree tree){
-        phpProperty = store.create(PHPProperty.class);
-        phpProperty.setVisibility(VisibilityModifier.DEFAULT);
-         phpProperty.setStatic(Boolean.FALSE);
+    /**
+     * parse tree and return contains php property
+     * @param tree
+     * @return 
+     */
+    public PHPPropertyDescriptor parse(ParseTree tree){
+        phpProperty = helper.getProperty();
         parseTree(tree, 1);
         
         System.err.println("ADD Property: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : ""));
         return phpProperty;
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
     protected void parseTree(ParseTree tree, int level){
         
         //String pad = "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP".substring(0, level);

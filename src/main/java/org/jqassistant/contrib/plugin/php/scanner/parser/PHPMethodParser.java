@@ -11,61 +11,62 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPType;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPMethod;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
- *
+ * parse subtree and detect method characteristics 
  * @author falk
- * - calls erkennen
  */
 public class PHPMethodParser {
-    protected PHPNamespace namespace;
-    protected Store store;
+    protected PHPNamespaceDescriptor namespace;
+    protected Helper helper;
     protected Map<String, PHPUse> useContext = new HashMap<>();
-    protected PHPMethod phpMethod;
-    protected PHPType phpClass;
+    protected PHPMethodDescriptor phpMethod;
+    protected PHPTypeDescriptor phpClass;
     protected List<String> modifire; 
     
       
-    public PHPMethodParser (Store store, PHPType phpClass){
+    public PHPMethodParser (Store store, PHPTypeDescriptor phpClass){
         this(store, phpClass, new  HashMap<String, PHPUse>());
     }
     
-    public PHPMethodParser (Store store, PHPType phpClass, Map<String, PHPUse> useContext){
+    public PHPMethodParser (Store store, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.phpClass = phpClass;
-        this.store = store;
+        this.helper = new Helper(store);
         
         modifire = new ArrayList<String>();
     }
     
-    public PHPMethod parse(ParseTree tree){
+    /**
+     * parse tree and return contains php method
+     * @param tree
+     * @return PHPMethodDescriptor
+     */
+    public PHPMethodDescriptor parse(ParseTree tree){
         parseTree(tree, 1);
         
         return phpMethod;
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
     protected void parseTree(ParseTree tree, int level){
         
         //String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpMethod == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
-            String fullname = getFullQualifiedName(tree.getText());
-            phpMethod = store.find(PHPMethod.class, fullname);
-            if(phpMethod == null){
-                phpMethod = store.create(PHPMethod.class);
-                phpMethod.setFullQualifiedName(fullname);
-                phpMethod.setName(tree.getText());
-                System.err.println("ADD Method: " + fullname);
-            }
-            
+            phpMethod = helper.getMethod(tree.getText(), phpClass);
             phpMethod.setParametersCount(0);
             phpMethod.setLinesOfCode(0);
             
@@ -102,7 +103,6 @@ public class PHPMethodParser {
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
             phpMethod.setLinesOfCode(countBodyLines(tree, 0));
-            (new PHPReferenceParser(store, phpMethod, namespace, useContext)).parse(tree);
             return;
         }
         
@@ -129,17 +129,5 @@ public class PHPMethodParser {
         return linesOfCode;
     }
     
-     protected String getFullQualifiedName(String Name){
-        String namespace = Name.toLowerCase();
-        
-
-        namespace = phpClass.getName().toLowerCase() + "|" + namespace;
-        PHPNamespace parent = phpClass.getNamespace();
-        while(parent != null){
-            namespace = parent.getName().toLowerCase() + "|" + namespace;
-            parent = parent.getParent();
-        }
-        return "METHOD|" + namespace;
-
-    }
+     
 }

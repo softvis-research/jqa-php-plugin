@@ -9,19 +9,27 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Property;
 
 /**
- *
+ * php class property
  * @author falk
  */
 @Label("Property")
-public interface PHPProperty extends PHPDescriptor  {
+public interface PHPPropertyDescriptor extends PHPDescriptor  {
 
     String getName();
     void setName(String name);
     
+    /**
+     * visibility modifier
+     * @return visibility modifier
+     */
     @Property("visibility")
     VisibilityModifier getVisibility();
     void setVisibility(VisibilityModifier visibility);
-
+    
+    /**
+     * is property static
+     * @return boolean
+     */
     @Property("static")
     Boolean isStatic();
     void setStatic(Boolean s);

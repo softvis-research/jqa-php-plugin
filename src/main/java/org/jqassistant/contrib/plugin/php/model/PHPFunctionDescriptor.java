@@ -7,15 +7,21 @@ package org.jqassistant.contrib.plugin.php.model;
 
 import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
-import com.buschmais.xo.neo4j.api.annotation.Property;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
-import java.util.List;
 
 /**
- *
+ * php function
  * @author falk
  */
-@Label(value = "Trait", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPTrait extends PHPDescriptor, PHPType {
+@Label(value = "Function", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface PHPFunctionDescriptor extends PHPDescriptor, PHPMethodDescriptor, FullQualifiedNameDescriptor {
+    
+    /**
+     * used namespace
+     * @return namespace 
+     */
+    @Relation("HAS_NAMESPACES")
+    PHPNamespaceDescriptor getNamespace();
+    void setNamespace(PHPNamespaceDescriptor namespace);
 
 }

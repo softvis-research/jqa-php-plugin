@@ -7,14 +7,15 @@ package org.jqassistant.contrib.plugin.php.model;
 
 import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
+import com.buschmais.xo.neo4j.api.annotation.Property;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 /**
- *
+ * PHP Trait
  * @author falk
  */
-@Label(value = "Interface", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPInterface extends PHPDescriptor, PHPType {
+@Label(value = "Trait", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface PHPTraitDescriptor extends PHPDescriptor, PHPTypeDescriptor {
 
 }

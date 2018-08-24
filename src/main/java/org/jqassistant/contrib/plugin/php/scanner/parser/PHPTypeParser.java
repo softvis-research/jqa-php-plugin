@@ -10,43 +10,50 @@ import com.sun.codemodel.internal.JExpr;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPMethod;
-import org.jqassistant.contrib.plugin.php.model.PHPProperty;
-import org.jqassistant.contrib.plugin.php.model.PHPType;
-import org.jqassistant.contrib.plugin.php.model.PHPInterface;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
- *
+ * parse subtree and detect type characteristics 
  * @author falk
- * - properties
-    - methods
-    - superclass erkennen 
  */
-public class PHPClassParser {
+public class PHPTypeParser {
     
-    protected PHPNamespace namespace;
+    protected PHPNamespaceDescriptor namespace;
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
-    protected PHPType phpClass;
+    protected PHPTypeDescriptor phpClass;
     protected boolean isAbstract = false;
     protected String type = "class";
     protected Helper helper;
     
-    public PHPClassParser (Store store, PHPNamespace namespace, Map<String, PHPUse> useContext){
+    public PHPTypeParser (Store store, PHPNamespaceDescriptor namespace, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.namespace = namespace;
         this.store = store;
         this.helper = new Helper(store);
     }
     
-    public PHPType parse(ParseTree tree){
+    /**
+     * parse tree and return contains php type (class, interface or trait)
+     * @param tree
+     * @return PHPNamespaceDescriptor
+     */
+    public PHPTypeDescriptor parse(ParseTree tree){
         parseTree(tree, 1, 0);
         return phpClass;
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
     protected void parseTree(ParseTree tree, int level, int idx){
         
 //        String pad = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC".substring(0, level);
@@ -60,7 +67,7 @@ public class PHPClassParser {
                 phpClass = helper.getTrait(tree.getText(), namespace);
             } else {
                 phpClass = helper.getClass(tree.getText(), namespace);
-                phpClass.as(PHPClass.class).setAbstract(isAbstract);
+                phpClass.as(PHPClassDescriptor.class).setAbstract(isAbstract);
             }
         }
         else if (phpClass == null && tree.getClass().getSimpleName().equals("ModifierContext")){
@@ -89,18 +96,18 @@ public class PHPClassParser {
             }
         }
         else if(phpClass != null && tree.getClass().getSimpleName().equals("InterfaceListContext")){
-            (new PHPClassMapper(store, phpClass, "interface", useContext)).parse(tree);
+            (new PHPTypeMapper(store, phpClass, "interface", useContext)).parse(tree);
             return;
         }
         else if(phpClass != null && level == 2 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("extends")){
-                (new PHPClassMapper(store, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(store, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }
         else if(phpClass != null && level == 3 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("use")){
-                (new PHPClassMapper(store, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(store, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }

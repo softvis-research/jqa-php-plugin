@@ -13,18 +13,34 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
+/**
+ * PHP file descriptor
+ * @author falk
+ */
 @Label("File")
-public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileDescriptor, PHPCalling {
+public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileDescriptor {
 
+    /**
+     * lines of code
+     * @return set of lines
+     */
     @Relation("HAS_LINE")
     Set<PHPLineDescriptor> getLines();
     
+    /**
+     * included functions
+     * @return list of functions 
+     */
     @Relation("CONTAINS")
-    List<PHPFunction> getFunctions();
-    void setFunctions(List<PHPFunction> functions);
+    List<PHPFunctionDescriptor> getFunctions();
+    void setFunctions(List<PHPFunctionDescriptor> functions);
     
+    /**
+     * included classes
+     * @return list of classes
+     */
     @Relation("CONTAINS")
-    List<PHPType> getClasses();
-    void setClasses(List<PHPType> classes);
+    List<PHPTypeDescriptor> getClasses();
+    void setClasses(List<PHPTypeDescriptor> classes);
     
 }

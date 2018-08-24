@@ -10,37 +10,47 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
-import org.jqassistant.contrib.plugin.php.model.PHPType;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import java.util.List;
-import org.jqassistant.contrib.plugin.php.model.PHPInterface;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPTrait;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTraitDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
- *
+ * detect super class, traits or interfaces an map it to class
  * @author falk
  */
-public class PHPClassMapper {
+public class PHPTypeMapper {
     
-    protected PHPType phpClass;
+    protected PHPTypeDescriptor phpClass;
     protected String mapType = "superclass";
     protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected Helper helper;
     
-    public PHPClassMapper(Store store, PHPType phpClass, String mapType, Map<String, PHPUse> useContext ){
+    public PHPTypeMapper(Store store, PHPTypeDescriptor phpClass, String mapType, Map<String, PHPUse> useContext ){
         this.phpClass = phpClass;
         this.mapType = mapType;
         this.useContext = useContext;
         this.helper = new Helper(store);
     }
     
+    /**
+     * parse tree
+     * @param tree
+     * @return PHPNamespaceDescriptor
+     */
     public void parse(ParseTree tree){
         parseTree(tree, 5);
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
     protected void parseTree(ParseTree tree, Integer level){
         
         //String pad = "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII".substring(0, level);
@@ -83,7 +93,7 @@ public class PHPClassMapper {
                     
                     if(!isMapped){
                         //use Namespace
-                        PHPNamespace n = phpClass.getNamespace();
+                        PHPNamespaceDescriptor n = phpClass.getNamespace();
                         while (n != null){
                             namelist.add(0, n.getName());
                             n = n.getParent();
@@ -109,12 +119,13 @@ public class PHPClassMapper {
     
     }
     
+    /**
+     * mapp inerface, super class or trait to php type
+     * @param namelist 
+     */
     protected void addClass(List<String> namelist){
         
-        //TODO: Namespace anlegen
-        //TODO: Classe oder interface anlegen
-        
-        PHPNamespace n = null;
+        PHPNamespaceDescriptor n = null;
         
         Integer s = namelist.size() -1;
         for (int i = 0; i < s; i++) {
@@ -122,16 +133,16 @@ public class PHPClassMapper {
         }
         
         if (mapType.equals("interface")){
-            PHPInterface i = helper.getInterface(namelist.get(namelist.size() -1), n);
+            PHPInterfaceDescriptor i = helper.getInterface(namelist.get(namelist.size() -1), n);
             phpClass.getInterfaces().add(i);
         }
         else if (mapType.equals("superclass")) {
-            PHPClass c = helper.getClass(namelist.get(namelist.size() -1), n);
+            PHPClassDescriptor c = helper.getClass(namelist.get(namelist.size() -1), n);
             phpClass.setSuperClass(c);
         }
         else if (mapType.equals("trait")) {
-            PHPTrait c = helper.getTrait(namelist.get(namelist.size() -1), n);
-            phpClass.as(PHPClass.class).getTraits().add(c);
+            PHPTraitDescriptor c = helper.getTrait(namelist.get(namelist.size() -1), n);
+            phpClass.as(PHPClassDescriptor.class).getTraits().add(c);
         }
     }
     

@@ -11,17 +11,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 
 /**
- *
+ * parse subtree and detect namespace characteristics 
  * @author falk
- * - super namespaces erkennen
  */
 public class PHPNameSpaceParser {
     
-    protected PHPNamespace parentNamespace;
+    protected PHPNamespaceDescriptor parentNamespace;
     protected Boolean start = false;
     protected Helper helper;
     
@@ -29,15 +28,24 @@ public class PHPNameSpaceParser {
         helper = new Helper(store);
     }
     
-    protected PHPNamespace parse(ParseTree tree){
+    /**
+     * parse tree and return contains php namespace
+     * @param tree
+     * @return PHPNamespaceDescriptor
+     */
+    protected PHPNamespaceDescriptor parse(ParseTree tree){
         start = false;
         parseTree(tree, 10);
         return parentNamespace;
     }
     
     
-    
-    protected PHPNamespace parseTree(ParseTree tree, int level){
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
+    protected void parseTree(ParseTree tree, int level){
         
         //String pad = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN".substring(0, level);
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
@@ -54,7 +62,5 @@ public class PHPNameSpaceParser {
             ParseTree childTree = tree.getChild(i);
             parseTree(childTree, level + 1);
         }
-        
-        return null;
     }
 }

@@ -14,13 +14,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-import org.jqassistant.contrib.plugin.php.model.PHPDirectoryDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
-import java.io.InputStream;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
-import java.util.Iterator;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 
 /**
  * Unit test for simple App.
@@ -97,8 +93,8 @@ public class PHPScannerTest extends AbstractPluginIT
          System.out.println("org.jqassistant.contrib.plugin.php.StoreTest()");
          store.beginTransaction();
          
-         PHPClass v = store.create(PHPClass.class);
-          store.create(PHPClass.class);
+         PHPClassDescriptor v = store.create(PHPClassDescriptor.class);
+          store.create(PHPClassDescriptor.class);
          v.setFullQualifiedName("test");
          v.setName("blub");
          // AbstractPluginIT.TestResult testResult;
@@ -115,7 +111,7 @@ public class PHPScannerTest extends AbstractPluginIT
 //        }
          
         //System.out.println("test find");
-        PHPClass f = store.find(PHPClass.class, "test");
+        PHPClassDescriptor f = store.find(PHPClassDescriptor.class, "test");
          assertThat(f.getName(), equalTo("blub"));
         
         store.commitTransaction();

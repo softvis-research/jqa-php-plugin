@@ -6,7 +6,7 @@
 package org.jqassistant.contrib.plugin.php.model;
 
 /**
- *
+ * enum of visibility modifier
  * @author falk
  */
 public enum VisibilityModifier

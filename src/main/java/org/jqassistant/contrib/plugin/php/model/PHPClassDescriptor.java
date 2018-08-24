@@ -12,17 +12,25 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 /**
- *
+ * PHP Class Descriptor
  * @author falk
  */
 @Label(value = "Class", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPClass extends PHPDescriptor, PHPType {
+public interface PHPClassDescriptor extends PHPDescriptor, PHPTypeDescriptor {
     
+    /**
+     * is abstract class
+     * @return BOOLEAN
+     */
     @Property("abstract")
     Boolean isAbstract();
     void setAbstract(Boolean isAbstract);
     
+    /**
+     * used traits
+     * @return List of used traits 
+     */
     @Relation("TRAITS")
-    List<PHPTrait> getTraits();
-    void setTraits(List<PHPTrait> traits);
+    List<PHPTraitDescriptor> getTraits();
+    void setTraits(List<PHPTraitDescriptor> traits);
 }

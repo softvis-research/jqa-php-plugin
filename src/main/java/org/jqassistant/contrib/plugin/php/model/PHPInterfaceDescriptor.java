@@ -5,17 +5,16 @@
  */
 package org.jqassistant.contrib.plugin.php.model;
 
+import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
+import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 /**
- *
+ * php interface
  * @author falk
  */
-public interface PHPCalling{
-    
-    @Relation("CONTAINS")
-    List<PHPMethod> getCalls();
-    void setCalls(List<PHPMethod> calls);
-    
+@Label(value = "Interface", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface PHPInterfaceDescriptor extends PHPDescriptor, PHPTypeDescriptor {
+
 }

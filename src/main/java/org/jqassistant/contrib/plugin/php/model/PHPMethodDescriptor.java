@@ -12,27 +12,43 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 import java.util.List;
 
 /**
- *
+ * php mehod
  * @author falk
  */
 @Label(value = "Method", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface PHPMethod extends PHPDescriptor, FullQualifiedNameDescriptor, PHPCalling {
+public interface PHPMethodDescriptor extends PHPDescriptor, FullQualifiedNameDescriptor {
     
     String getName();
     void setName(String name);
     
+    /**
+     * count of lines
+     * @return integer 
+     */
     @Property("linesOfCode")
     int getLinesOfCode();
     void setLinesOfCode(int linesOfCode);
     
+    /**
+     * count of parameters
+     * @return integer
+     */
     @Property("count_of_parameters")
     Integer getParametersCount();
     void setParametersCount(Integer parametersCount);
     
+    /**
+     * visibility modifier
+     * @return visibility modifier
+     */
     @Property("visibility")
     VisibilityModifier getVisibility();
     void setVisibility(VisibilityModifier visibility);
 
+    /**
+     * is method static
+     * @return boolean
+     */
     @Property("static")
     Boolean isStatic();
     void setStatic(Boolean s);

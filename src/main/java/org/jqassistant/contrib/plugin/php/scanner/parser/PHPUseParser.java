@@ -9,13 +9,13 @@ import com.buschmais.jqassistant.core.store.api.Store;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 
 /**
- *
+ * parse subtree and detect used clause specification.
+ * in php, it can be a namespace or a type.
  * @author falk
- * - super namespaces erkennen
  */
 public class PHPUseParser {
     
@@ -27,6 +27,11 @@ public class PHPUseParser {
         
     }
     
+    /**
+     * parse tree and return contains 'use'
+     * @param tree
+     * @return PHPUse
+     */
     protected PHPUse parse(ParseTree tree){
         start = false;
         parseTree(tree, 10);
@@ -34,9 +39,12 @@ public class PHPUseParser {
         return parentUse;
     }
     
-    
-    
-    protected PHPUse parseTree(ParseTree tree, int level){
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
+    protected void parseTree(ParseTree tree, int level){
         
         //String pad = "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN".substring(0, level);
         //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
@@ -63,7 +71,5 @@ public class PHPUseParser {
             ParseTree childTree = tree.getChild(i);
             parseTree(childTree, level + 1);
         }
-        
-        return null;
     }
 }

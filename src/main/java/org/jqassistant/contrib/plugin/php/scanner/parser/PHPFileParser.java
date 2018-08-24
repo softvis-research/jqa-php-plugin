@@ -6,33 +6,29 @@
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
-import org.jqassistant.contrib.plugin.php.model.PHPClass;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPFunction;
-import org.jqassistant.contrib.plugin.php.model.PHPNamespace;
-import org.jqassistant.contrib.plugin.php.model.PHPProperty;
 import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
 import com.buschmais.jqassistant.core.store.api.Store;
 import java.util.HashMap;
 import java.util.Map;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
+import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 
 /**
- *  - namespace erkennen
-    - use anweisungen erkennen
-    - funktionen
-    - calls
-    - classes
+ * parse php files
+ * detect namespace, uses, classes and funtions
  * @author falk
  */
 public class PHPFileParser {
     
     protected PHPFileDescriptor fileDescriptor;
     protected Store store;
-    protected PHPNamespace namespace;
+    protected PHPNamespaceDescriptor namespace;
     protected Map<String, PHPUse> useContext = new HashMap<>();
-    PHPReferenceParser referenceParser;
     
     public PHPFileParser(Store store, PHPFileDescriptor fileDescriptor){
         this.fileDescriptor = fileDescriptor;
@@ -41,14 +37,15 @@ public class PHPFileParser {
     
     public void parse(ParseTree tree){   
         
-        System.out.println("org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser.parse()");
-        referenceParser = new PHPReferenceParser(store, fileDescriptor, namespace, useContext);
-       
         parseTree(tree, 0);
-        
         
     }
     
+    /**
+     * walk through tree 
+     * @param tree
+     * @param level 
+     */
      protected void parseTree(ParseTree tree, int level){
         
         switch (tree.getClass().getSimpleName()) {
@@ -60,20 +57,14 @@ public class PHPFileParser {
                 useContext.put(u.alias, u);
                 return;
             case "ClassDeclarationContext":
-                fileDescriptor.getClasses().add((new PHPClassParser(store, namespace, useContext)).parse(tree));
+                fileDescriptor.getClasses().add((new PHPTypeParser(store, namespace, useContext)).parse(tree));
                 return;
             case "FunctionDeclarationContext":
                 fileDescriptor.getFunctions().add((new PHPFunctionParser(store, namespace, useContext)).parse(tree));
                 return;
             case "AssignmentExpressionContext":
-                referenceParser.setNamespace(namespace);
-                referenceParser.setUseContext(useContext);
-                referenceParser.parse(tree);
                 return;
             case "ChainExpressionContext":
-                referenceParser.setNamespace(namespace);
-                referenceParser.setUseContext(useContext);
-                referenceParser.parse(tree);
                 return;
         }
         
