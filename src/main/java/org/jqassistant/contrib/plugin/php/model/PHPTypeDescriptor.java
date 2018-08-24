@@ -25,7 +25,7 @@ public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescr
      * methods
      * @return list of methods
      */
-    @Relation("HAS_METHODS")
+    @Relation("DECLARES")
     List<PHPMethodDescriptor> getMethods();
     void setMethods(List<PHPMethodDescriptor> methods);
     
@@ -49,7 +49,7 @@ public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescr
      * used namespace
      * @return namespace
      */
-    @Relation("HAS_NAMESPACES")
+    @Relation("HAS_NAMESPACE")
     PHPNamespaceDescriptor getNamespace();
     void setNamespace(PHPNamespaceDescriptor namespace);
 

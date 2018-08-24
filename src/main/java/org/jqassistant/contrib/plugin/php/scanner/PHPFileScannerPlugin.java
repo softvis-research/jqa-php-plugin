@@ -74,7 +74,9 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
 //                pumlLineParser.parseLine(line);
 //            }
 //        }
-        
+
+        phpFileDescriptor.setName(item.getFile().getName());
+
         final PHPSourceParser sourceParser = new PHPSourceParser(store, phpFileDescriptor);
         sourceParser.parseFile(item);
         

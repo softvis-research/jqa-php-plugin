@@ -33,7 +33,7 @@ public interface PHPMethodDescriptor extends PHPDescriptor, FullQualifiedNameDes
      * count of parameters
      * @return integer
      */
-    @Property("count_of_parameters")
+    @Property("countOfParameters")
     Integer getParametersCount();
     void setParametersCount(Integer parametersCount);
     

@@ -20,7 +20,7 @@ public interface PHPFunctionDescriptor extends PHPDescriptor, PHPMethodDescripto
      * used namespace
      * @return namespace 
      */
-    @Relation("HAS_NAMESPACES")
+    @Relation("HAS_NAMESPACE")
     PHPNamespaceDescriptor getNamespace();
     void setNamespace(PHPNamespaceDescriptor namespace);
 

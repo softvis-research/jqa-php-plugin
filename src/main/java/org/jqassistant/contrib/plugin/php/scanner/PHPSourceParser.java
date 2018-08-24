@@ -13,12 +13,14 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.PhpLexer;
 import org.jqassistant.contrib.plugin.php.PhpParser;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
+import org.antlr.v4.runtime.misc.Interval;
 
 /**
  *
@@ -48,6 +50,11 @@ public class PHPSourceParser {
             
             PHPFileParser a = new PHPFileParser(store, this.fileDescriptor);
             a.parse(tree);
+            
+//            Interval sourceInterval = tree.getChild(0).getSourceInterval();
+//            Token firstToken = tokenStream.get(sourceInterval.a);
+//            int line = firstToken.getLine();
+//            System.out.println("org.jqassistant.contrib.plugin.php.scanner.PHPSourceParser.parseFile()" + line) ;
         
         } catch (Exception e) {
          e.printStackTrace();

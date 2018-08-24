@@ -30,7 +30,7 @@ public interface PHPClassDescriptor extends PHPDescriptor, PHPTypeDescriptor {
      * used traits
      * @return List of used traits 
      */
-    @Relation("TRAITS")
+    @Relation("USE")
     List<PHPTraitDescriptor> getTraits();
     void setTraits(List<PHPTraitDescriptor> traits);
 }
