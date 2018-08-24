@@ -56,8 +56,8 @@ public class PHPTypeParser {
      */
     protected void parseTree(ParseTree tree, int level, int idx){
         
-//        String pad = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC".substring(0, level);
-//        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        //String pad = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC".substring(0, level);
+        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpClass == null && tree.getClass().getSimpleName().equals("IdentifierContext")) {
             if (type.equals("interface")){
@@ -100,7 +100,7 @@ public class PHPTypeParser {
             return;
         }
         else if(phpClass != null && level == 2 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
-            if(tree.getText().toLowerCase().equals("extends")){
+            if(tree.getText().toLowerCase().equals("extends") && !type.equals("interface")){
                 (new PHPTypeMapper(store, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }

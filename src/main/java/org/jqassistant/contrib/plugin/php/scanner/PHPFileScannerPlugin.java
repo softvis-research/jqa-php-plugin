@@ -67,13 +67,13 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
 		FileDescriptor fileDescriptor = scanner.getContext().getCurrentDescriptor();
 		final PHPFileDescriptor phpFileDescriptor = store.addDescriptorType(fileDescriptor, PHPFileDescriptor.class);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(item.createStream()))) {
-            final PHPLineParser pumlLineParser = new PHPLineParser(store, phpFileDescriptor);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                pumlLineParser.parseLine(line);
-            }
-        }
+//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(item.createStream()))) {
+//            final PHPLineParser pumlLineParser = new PHPLineParser(store, phpFileDescriptor);
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                pumlLineParser.parseLine(line);
+//            }
+//        }
         
         final PHPSourceParser sourceParser = new PHPSourceParser(store, phpFileDescriptor);
         sourceParser.parseFile(item);
