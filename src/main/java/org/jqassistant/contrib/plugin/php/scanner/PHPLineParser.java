@@ -24,6 +24,6 @@ class PHPLineParser {
         PHPLineDescriptor plaintextLineDescriptor = store.create(PHPLineDescriptor.class);
         plaintextLineDescriptor.setLineNumber(lineNumber++);
         plaintextLineDescriptor.setText(line);
-        plaintextFileDescriptor.getLines().add(plaintextLineDescriptor);
+        //plaintextFileDescriptor.getLines().add(plaintextLineDescriptor);
     }
 }

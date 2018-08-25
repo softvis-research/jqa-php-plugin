@@ -33,5 +33,13 @@ public interface PHPPropertyDescriptor extends PHPDescriptor  {
     @Property("static")
     Boolean isStatic();
     void setStatic(Boolean s);
+    
+    /**
+     * Number of line in source file
+     * @return integer 
+     */
+    @Property("lineNumber")
+    int getLineNumber();
+    void setLineNumber(int lineNumber);
    
 }

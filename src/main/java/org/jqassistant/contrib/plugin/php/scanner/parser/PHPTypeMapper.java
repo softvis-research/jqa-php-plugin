@@ -5,7 +5,6 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.store.api.Store;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +25,14 @@ public class PHPTypeMapper {
     
     protected PHPTypeDescriptor phpClass;
     protected String mapType = "superclass";
-    protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected Helper helper;
     
-    public PHPTypeMapper(Store store, PHPTypeDescriptor phpClass, String mapType, Map<String, PHPUse> useContext ){
+    public PHPTypeMapper(Helper helper, PHPTypeDescriptor phpClass, String mapType, Map<String, PHPUse> useContext ){
         this.phpClass = phpClass;
         this.mapType = mapType;
         this.useContext = useContext;
-        this.helper = new Helper(store);
+        this.helper = helper;
     }
     
     /**

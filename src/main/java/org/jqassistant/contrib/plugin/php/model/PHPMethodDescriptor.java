@@ -53,4 +53,12 @@ public interface PHPMethodDescriptor extends PHPDescriptor, FullQualifiedNameDes
     Boolean isStatic();
     void setStatic(Boolean s);
     
+    /**
+     * Number of first line in source file
+     * @return integer 
+     */
+    @Property("lineNumber")
+    int getLineNumber();
+    void setLineNumber(int lineNumber);
+    
 }

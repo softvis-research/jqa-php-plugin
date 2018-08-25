@@ -6,6 +6,8 @@
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
 import com.buschmais.jqassistant.core.store.api.Store;
+import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.Token;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor;
@@ -16,6 +18,7 @@ import org.jqassistant.contrib.plugin.php.model.PHPTraitDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 
+
 /**
  * helper class
  * @author falk
@@ -23,9 +26,16 @@ import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 public class Helper {
 
     protected Store store;
+    protected TokenStream tokenStream;
     
-    public Helper(Store store){
+    public Helper(Store store, TokenStream tokenStream){
         this.store = store;
+        this.tokenStream = tokenStream;
+    }
+    
+    public Integer getLineNumberByTokenNumber(Integer tokenNumber){
+        Token firstToken = tokenStream.get(tokenNumber);
+        return firstToken.getLine();    
     }
     
     /**

@@ -5,10 +5,8 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.store.api.Store;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
-import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 
 /**
@@ -19,8 +17,8 @@ public class PHPPropertyParser {
     protected Helper helper;
     protected PHPPropertyDescriptor phpProperty;
     
-    public PHPPropertyParser (Store store){
-        this.helper = new Helper(store);
+    public PHPPropertyParser (Helper helper){
+        this.helper = helper;
     }
     
     /**
@@ -30,6 +28,7 @@ public class PHPPropertyParser {
      */
     public PHPPropertyDescriptor parse(ParseTree tree){
         phpProperty = helper.getProperty();
+        phpProperty.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
         parseTree(tree, 1);
         
         System.err.println("ADD Property: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : ""));

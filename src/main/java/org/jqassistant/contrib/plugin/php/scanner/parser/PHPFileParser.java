@@ -5,18 +5,12 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
-import java.util.List;
 import org.antlr.v4.runtime.tree.ParseTree;
-import com.buschmais.jqassistant.core.store.api.Store;
 import java.util.HashMap;
 import java.util.Map;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 
 /**
  * parse php files
@@ -26,13 +20,13 @@ import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 public class PHPFileParser {
     
     protected PHPFileDescriptor fileDescriptor;
-    protected Store store;
+    protected Helper helper;
     protected PHPNamespaceDescriptor namespace;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     
-    public PHPFileParser(Store store, PHPFileDescriptor fileDescriptor){
+    public PHPFileParser(Helper helper, PHPFileDescriptor fileDescriptor){
         this.fileDescriptor = fileDescriptor;
-        this.store = store;
+        this.helper = helper;
     }
     
     public void parse(ParseTree tree){   
@@ -62,14 +56,14 @@ public class PHPFileParser {
                     useContext.put(u2.alias, u2);
                 }
                 else {
-                    namespace = (new PHPNameSpaceParser(store)).parse(tree);
+                    namespace = (new PHPNameSpaceParser(helper)).parse(tree);
                 }
                 return;
             case "ClassDeclarationContext":
-                fileDescriptor.getClasses().add((new PHPTypeParser(store, namespace, useContext)).parse(tree));
+                fileDescriptor.getClasses().add((new PHPTypeParser(helper, namespace, useContext)).parse(tree));
                 return;
             case "FunctionDeclarationContext":
-                fileDescriptor.getFunctions().add((new PHPFunctionParser(store, namespace, useContext)).parse(tree));
+                fileDescriptor.getFunctions().add((new PHPFunctionParser(helper, namespace, useContext)).parse(tree));
                 return;
             case "AssignmentExpressionContext":
                 return;

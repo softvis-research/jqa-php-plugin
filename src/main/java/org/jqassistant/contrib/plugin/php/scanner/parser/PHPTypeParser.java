@@ -5,17 +5,12 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.store.api.Store;
-import com.sun.codemodel.internal.JExpr;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
@@ -25,18 +20,16 @@ import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 public class PHPTypeParser {
     
     protected PHPNamespaceDescriptor namespace;
-    protected Store store;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPTypeDescriptor phpClass;
     protected boolean isAbstract = false;
     protected String type = "class";
     protected Helper helper;
     
-    public PHPTypeParser (Store store, PHPNamespaceDescriptor namespace, Map<String, PHPUse> useContext){
+    public PHPTypeParser (Helper helper, PHPNamespaceDescriptor namespace, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.namespace = namespace;
-        this.store = store;
-        this.helper = new Helper(store);
+        this.helper = helper;
     }
     
     /**
@@ -86,28 +79,28 @@ public class PHPTypeParser {
         else if (phpClass != null && tree.getClass().getSimpleName().equals("ClassStatementContext")){
             for (int i = 0; i < tree.getChildCount(); i++) {
                 if(tree.getChild(i).getClass().getSimpleName().equals("VariableInitializerContext")){
-                    phpClass.getProperties().add((new PHPPropertyParser(store)).parse(tree));
+                    phpClass.getProperties().add((new PHPPropertyParser(helper)).parse(tree));
                     return;
                 }
                 else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
-                    phpClass.getMethods().add((new PHPMethodParser(store, phpClass)).parse(tree));
+                    phpClass.getMethods().add((new PHPMethodParser(helper, phpClass)).parse(tree));
                     return;
                 }
             }
         }
         else if(phpClass != null && tree.getClass().getSimpleName().equals("InterfaceListContext")){
-            (new PHPTypeMapper(store, phpClass, "interface", useContext)).parse(tree);
+            (new PHPTypeMapper(helper, phpClass, "interface", useContext)).parse(tree);
             return;
         }
         else if(phpClass != null && level == 2 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("extends") && !type.equals("interface")){
-                (new PHPTypeMapper(store, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(helper, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }
         else if(phpClass != null && level == 3 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("use")){
-                (new PHPTypeMapper(store, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(helper, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }

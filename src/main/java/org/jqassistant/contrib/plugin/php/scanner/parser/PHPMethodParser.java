@@ -5,16 +5,13 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.store.api.Store;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
-import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
-import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
@@ -32,14 +29,14 @@ public class PHPMethodParser {
     protected List<String> modifire; 
     
       
-    public PHPMethodParser (Store store, PHPTypeDescriptor phpClass){
-        this(store, phpClass, new  HashMap<String, PHPUse>());
+    public PHPMethodParser (Helper helper, PHPTypeDescriptor phpClass){
+        this(helper, phpClass, new  HashMap<String, PHPUse>());
     }
     
-    public PHPMethodParser (Store store, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext){
+    public PHPMethodParser (Helper helper, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext){
         this.useContext = useContext;
         this.phpClass = phpClass;
-        this.helper = new Helper(store);
+        this.helper = helper;
         
         modifire = new ArrayList<String>();
     }
@@ -69,6 +66,7 @@ public class PHPMethodParser {
             phpMethod = helper.getMethod(tree.getText(), phpClass);
             phpMethod.setParametersCount(0);
             phpMethod.setLinesOfCode(0);
+            phpMethod.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
             
             for (int i = 0; i < modifire.size(); i++) {
                 switch (modifire.get(i)){

@@ -21,6 +21,7 @@ import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
 import org.antlr.v4.runtime.misc.Interval;
+import org.jqassistant.contrib.plugin.php.scanner.parser.Helper;
 
 /**
  *
@@ -48,7 +49,7 @@ public class PHPSourceParser {
             ParseTree tree = parser.htmlDocument();
             //System.err.println(tree.toStringTree(parser));
             
-            PHPFileParser a = new PHPFileParser(store, this.fileDescriptor);
+            PHPFileParser a = new PHPFileParser(new Helper(store, tokenStream), this.fileDescriptor);
             a.parse(tree);
             
 //            Interval sourceInterval = tree.getChild(0).getSourceInterval();

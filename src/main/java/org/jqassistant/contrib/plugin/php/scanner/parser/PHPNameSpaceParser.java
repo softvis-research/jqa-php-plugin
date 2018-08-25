@@ -5,13 +5,7 @@
  */
 package org.jqassistant.contrib.plugin.php.scanner.parser;
 
-import com.buschmais.jqassistant.core.store.api.Store;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 
 /**
@@ -24,8 +18,8 @@ public class PHPNameSpaceParser {
     protected Boolean start = false;
     protected Helper helper;
     
-    public PHPNameSpaceParser (Store store){
-        helper = new Helper(store);
+    public PHPNameSpaceParser (Helper helper){
+        this.helper = helper;
     }
     
     /**
