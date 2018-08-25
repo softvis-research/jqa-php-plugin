@@ -4,3 +4,5 @@
 [![Build Status](https://api.travis-ci.com/softvis-research/jqa-php-plugin.svg?branch=development)](https://travis-ci.com/softvis-research/jqa-php-plugin)
 
 This is a php parser of jQAssistant. It enables jQAssistant to scan and to analyze php files.
+
+![graph](material/graph.png)
