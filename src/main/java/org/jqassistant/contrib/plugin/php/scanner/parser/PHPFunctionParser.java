@@ -99,7 +99,7 @@ public class PHPFunctionParser {
             return;
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
-            phpFunction.setLinesOfCode(countBodyLines(tree, 0));
+            phpFunction.setLinesOfCode(countBodyLines(tree));
             return;
         }
         
@@ -110,16 +110,8 @@ public class PHPFunctionParser {
         }
     }
     
-    protected Integer countBodyLines(ParseTree tree, int linesOfCode){
-        if (tree.getClass().getSimpleName().equals("InnerStatementContext")){
-            linesOfCode++;
-        }
-        
-        int childCount = tree.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            linesOfCode += countBodyLines(tree.getChild(i), 0);
-        }
-        
-        return linesOfCode;
+    protected Integer countBodyLines(ParseTree tree){
+         Integer end = helper.getLineNumberByTokenNumber(tree.getSourceInterval().b);
+         return end - phpFunction.getLineNumber() + 1;
     }
 }
