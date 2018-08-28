@@ -14,6 +14,7 @@ import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
  * parse subtree and detect function characteristics 
@@ -24,9 +25,21 @@ public class PHPFunctionParser {
     protected Helper helper;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPFunctionDescriptor phpFunction;
-    protected PHPNamespaceDescriptor phpNamespace;
+    protected PHPNamespaceDescriptor phpNamespace = null;
+    protected PHPTypeDescriptor phpClass = null;
     protected List<String> modifire; 
 
+    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass){
+        this(helper, phpClass, new  HashMap<String, PHPUse>());
+    }
+    
+    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext){
+        this.useContext = useContext;
+        this.phpClass = phpClass;
+        this.helper = helper;
+        
+        modifire = new ArrayList<String>();
+    }
     
     public PHPFunctionParser (Helper helper, PHPNamespaceDescriptor phpNamespace){
         this(helper, phpNamespace, new  HashMap<String, PHPUse>());
@@ -58,12 +71,16 @@ public class PHPFunctionParser {
      */
     protected void parseTree(ParseTree tree, int level){
         
-        //String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
-        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+//        String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
+//        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
         if(phpFunction == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
-            phpFunction = helper.getFunction(tree.getText(), namespace);
-            phpFunction.setParametersCount(0);
+            if(phpClass != null){
+                phpFunction = helper.getFunction(tree.getText(), phpClass);
+            } else {
+                phpFunction = helper.getFunction(tree.getText(), namespace);
+            }
+            
             phpFunction.setLinesOfCode(0);
             phpFunction.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
             
@@ -89,13 +106,7 @@ public class PHPFunctionParser {
             modifire.add(tree.getText().toLowerCase());
         }
         else if (tree.getClass().getSimpleName().equals("FormalParameterListContext")){
-            Integer parameterCount = 0;
-            for (int i = 0; i < tree.getChildCount(); i++) {
-                 if (tree.getChild(i).getClass().getSimpleName().equals("FormalParameterContext")){
-                    parameterCount++;
-                 }
-            }
-            phpFunction.setParametersCount(parameterCount);
+            parseParameterListTree(tree, level);
             return;
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
@@ -109,6 +120,22 @@ public class PHPFunctionParser {
             parseTree(childTree, level + 1);
         }
     }
+    
+     protected void parseParameterListTree(ParseTree tree, int level){
+//        String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
+//        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+         
+        if (tree.getClass().getSimpleName().equals("VariableInitializerContext")){
+            phpFunction.getParameters().add(helper.getFunctionParameter(phpFunction.getParameters().size(), tree.getChild(0).getText()));
+            return;
+        } 
+         
+        int childCount = tree.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            ParseTree childTree = tree.getChild(i);
+            parseParameterListTree(childTree, level + 1);
+        }
+     }
     
     protected Integer countBodyLines(ParseTree tree){
          Integer end = helper.getLineNumberByTokenNumber(tree.getSourceInterval().b);

@@ -11,13 +11,12 @@ import org.antlr.v4.runtime.Token;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTraitDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
-
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor;
 
 /**
  * helper class
@@ -162,11 +161,11 @@ public class Helper {
      * @param phpClass
      * @return PHPMethodDescriptor
      */
-    public PHPMethodDescriptor getMethod(String name, PHPTypeDescriptor phpClass){
-        String fullname = method_getFullQualifiedName(name, phpClass);
-        PHPMethodDescriptor phpMethod = store.find(PHPMethodDescriptor.class, fullname);
+    public PHPFunctionDescriptor getFunction(String name, PHPTypeDescriptor phpClass){
+        String fullname = function_getFullQualifiedName(name, phpClass);
+        PHPFunctionDescriptor phpMethod = store.find(PHPFunctionDescriptor.class, fullname);
         if(phpMethod == null){
-            phpMethod = store.create(PHPMethodDescriptor.class);
+            phpMethod = store.create(PHPFunctionDescriptor.class);
             phpMethod.setFullQualifiedName(fullname);
             phpMethod.setName(name);
             System.err.println("ADD Method: " + fullname);
@@ -181,7 +180,7 @@ public class Helper {
      * @param phpClass
      * @return String
      */
-    private String method_getFullQualifiedName(String Name, PHPTypeDescriptor phpClass){
+    private String function_getFullQualifiedName(String Name, PHPTypeDescriptor phpClass){
         String namespace = Name.toLowerCase();
         
 
@@ -240,5 +239,14 @@ public class Helper {
         phpProperty.setStatic(Boolean.FALSE);
         
         return phpProperty;
+    }
+    
+     public PHPFunctionParameterDescriptor getFunctionParameter(Integer idx, String name){
+        PHPFunctionParameterDescriptor phpFunctionParameter = store.create(PHPFunctionParameterDescriptor.class);
+        phpFunctionParameter.setIndex(idx);
+        phpFunctionParameter.setName(name);
+        System.err.println("ADD FunctionParameter: " + idx + " " + name);
+        
+        return phpFunctionParameter;
     }
 }

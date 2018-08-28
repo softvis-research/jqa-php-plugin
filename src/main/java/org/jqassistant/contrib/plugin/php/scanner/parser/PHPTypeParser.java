@@ -10,6 +10,7 @@ import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
@@ -83,7 +84,7 @@ public class PHPTypeParser {
                     return;
                 }
                 else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
-                    phpClass.getMethods().add((new PHPMethodParser(helper, phpClass)).parse(tree));
+                    phpClass.getMethods().add((new PHPFunctionParser(helper, phpClass)).parse(tree));
                     return;
                 }
             }

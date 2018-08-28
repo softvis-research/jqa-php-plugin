@@ -26,8 +26,8 @@ public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescr
      * @return list of methods
      */
     @Relation("DECLARES")
-    List<PHPMethodDescriptor> getMethods();
-    void setMethods(List<PHPMethodDescriptor> methods);
+    List<PHPFunctionDescriptor> getMethods();
+    void setMethods(List<PHPFunctionDescriptor> methods);
     
     /**
      * properties

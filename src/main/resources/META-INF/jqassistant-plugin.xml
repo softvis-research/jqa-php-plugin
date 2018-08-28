@@ -6,7 +6,7 @@
         <class>org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.php.model.PHPMethodDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor</class>
