@@ -81,8 +81,9 @@ public class PHPFunctionParser {
                 phpFunction = helper.getFunction(tree.getText(), phpNamespace);
             }
             
-            phpFunction.setLinesOfCode(0);
-            phpFunction.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
+            phpFunction.setFirstLineNumber(helper.getLineNumberByTokenNumber(tree.getSourceInterval().a));
+            phpFunction.setLastLineNumber(helper.getLineNumberByTokenNumber(tree.getParent().getSourceInterval().b));
+            phpFunction.setEffectiveLineCount(0);
             
             for (int i = 0; i < modifire.size(); i++) {
                 switch (modifire.get(i)){
@@ -110,7 +111,7 @@ public class PHPFunctionParser {
             return;
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
-            phpFunction.setLinesOfCode(countBodyLines(tree));
+            phpFunction.setEffectiveLineCount(countBodyLines(tree, 0));
             return;
         }
         
@@ -137,8 +138,16 @@ public class PHPFunctionParser {
         }
      }
     
-    protected Integer countBodyLines(ParseTree tree){
-         Integer end = helper.getLineNumberByTokenNumber(tree.getSourceInterval().b);
-         return end - phpFunction.getLineNumber() + 1;
+    protected Integer countBodyLines(ParseTree tree, int linesOfCode){
+        if (tree.getClass().getSimpleName().equals("InnerStatementContext")){
+            linesOfCode++;
+        }
+        
+        int childCount = tree.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            linesOfCode += countBodyLines(tree.getChild(i), 0);
+        }
+        
+        return linesOfCode;
     }
 }

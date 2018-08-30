@@ -26,7 +26,9 @@ class index extends h implements o, \u\v {
 }
 
 function blub(array $x){
+    
     $blubber = new e\f();
+    
 }
 
 $a = new v();

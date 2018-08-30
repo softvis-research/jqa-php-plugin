@@ -22,14 +22,6 @@ public interface PHPFunctionDescriptor extends PHPDescriptor, FullQualifiedNameD
     void setName(String name);
     
     /**
-     * count of lines
-     * @return integer 
-     */
-    @Property("linesOfCode")
-    int getLinesOfCode();
-    void setLinesOfCode(int linesOfCode);
-    
-    /**
      * Return all declared parameters of this method.
      *
      * @return The declared parameters.
@@ -57,8 +49,26 @@ public interface PHPFunctionDescriptor extends PHPDescriptor, FullQualifiedNameD
      * Number of first line in source file
      * @return integer 
      */
-    @Property("lineNumber")
-    int getLineNumber();
-    void setLineNumber(int lineNumber);
+    @Property("firstLineNumber")
+    int getFirstLineNumber();
+    void setFirstLineNumber(int firstLineNumber);
+    
+    /**
+     * Number of last line in source file
+     * @return integer 
+     */
+    @Property("lastLineNumber")
+    int getLastLineNumber();
+    void setLastLineNumber(int lastLineNumber);
+    
+    
+    /**
+     * count of lines with commands
+     * @return integer 
+     */
+    @Property("effectiveLineCount")
+    int getEffectiveLineCount();
+    void setEffectiveLineCount(int effectiveLineCount);
+    
 
 }
