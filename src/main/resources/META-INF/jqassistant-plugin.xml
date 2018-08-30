@@ -1,0 +1,19 @@
+<jqa-plugin:jqassistant-plugin
+        xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.0" name="Plaintext">
+    <description>Provides a scanner for PHP files. Imports files line by line.</description>
+    <model>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPInterfaceDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.php.model.PHPTraitDescriptor</class>
+    </model>
+    <scanner>
+        <class>org.jqassistant.contrib.plugin.php.scanner.PHPFileScannerPlugin</class>
+    </scanner>
+</jqa-plugin:jqassistant-plugin>
