@@ -249,6 +249,7 @@ public class Helper {
         PHPPropertyDescriptor phpProperty = store.create(PHPPropertyDescriptor.class);
         phpProperty.setVisibility(VisibilityModifier.DEFAULT);
         phpProperty.setStatic(Boolean.FALSE);
+        phpProperty.setConstant(Boolean.FALSE);
         
         return phpProperty;
     }

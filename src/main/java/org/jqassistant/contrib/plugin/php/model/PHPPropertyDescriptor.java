@@ -35,6 +35,14 @@ public interface PHPPropertyDescriptor extends PHPDescriptor  {
     void setStatic(Boolean s);
     
     /**
+     * is property constant
+     * @return boolean
+     */
+    @Property("constant")
+    Boolean isConstant();
+    void setConstant(Boolean c);
+    
+    /**
      * Number of line in source file
      * @return integer 
      */

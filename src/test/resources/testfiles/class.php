@@ -9,8 +9,8 @@ class index extends h implements o, \u\v {
     
     private $_p = 1;
     public static $prop;
-
-
+    const CONSTANT1 = 'Konstanter Wert';
+    
     public function __construct(){
         echo "text index contructor";
     }

@@ -13,11 +13,11 @@ import org.jqassistant.contrib.plugin.php.model.PHPPropertyDescriptor;
  * parse subtree and detect property characteristics 
  * @author falk
  */
-public class PHPPropertyParser {
+public class PHPConstantParser {
     protected Helper helper;
     protected PHPPropertyDescriptor phpProperty;
     
-    public PHPPropertyParser (Helper helper){
+    public PHPConstantParser (Helper helper){
         this.helper = helper;
     }
     
@@ -29,9 +29,10 @@ public class PHPPropertyParser {
     public PHPPropertyDescriptor parse(ParseTree tree){
         phpProperty = helper.getProperty();
         phpProperty.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
+        phpProperty.setConstant(Boolean.TRUE);
         parseTree(tree, 1);
         
-        System.err.println("ADD Property: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
+        System.err.println("ADD Constant: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
         return phpProperty;
     }
     
@@ -42,27 +43,12 @@ public class PHPPropertyParser {
      */
     protected void parseTree(ParseTree tree, int level){
         
-//        String pad = "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP".substring(0, level);
-//        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
+        //String pad = "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP".substring(0, level);
+        //System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
         
-        if(tree.getClass().getSimpleName().equals("VariableInitializerContext")){
+        if(tree.getClass().getSimpleName().equals("IdentifierContext")){
             phpProperty.setName(tree.getChild(0).getText());
-        }
-        else if (tree.getClass().getSimpleName().equals("MemberModifierContext")){
-           switch (tree.getText().toLowerCase()){
-                case "static":
-                    phpProperty.setStatic(Boolean.TRUE);
-                    break;
-                case "private":
-                    phpProperty.setVisibility(VisibilityModifier.PRIVATE);
-                    break;
-                case "protected":
-                    phpProperty.setVisibility(VisibilityModifier.PROTECTED);
-                    break;
-                case "public":
-                    phpProperty.setVisibility(VisibilityModifier.PUBLIC);
-                    break;
-            }
+            return;
         }
 
         int childCount = tree.getChildCount();
