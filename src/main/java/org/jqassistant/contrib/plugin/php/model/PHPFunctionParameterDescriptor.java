@@ -12,7 +12,7 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
  * Parameter of function
  * @author falk
  */
-@Label("FunctionParameter")
+@Label("Parameter")
 public interface PHPFunctionParameterDescriptor extends PHPDescriptor{
     
     @Property("index")

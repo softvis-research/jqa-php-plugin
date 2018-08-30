@@ -81,19 +81,21 @@ public class Helper {
      * @return PHPInterfaceDescriptor
      */
     public PHPInterfaceDescriptor getInterface(String name, PHPNamespaceDescriptor namespace){
-         String fullname = type_getFullQualifiedName(name, namespace);
-           
-         PHPInterfaceDescriptor phpClass = store.find(PHPInterfaceDescriptor.class, fullname);
-            if(phpClass == null){
-                phpClass = store.create(PHPInterfaceDescriptor.class);
-                phpClass.setFullQualifiedName(fullname);
-                phpClass.setNamespace(namespace);
-                System.err.println("ADD Interface: " + fullname);
+        String fullname = type_getFullQualifiedName(name, namespace);
+
+        PHPInterfaceDescriptor phpClass = store.find(PHPInterfaceDescriptor.class, fullname);
+        if(phpClass == null){
+            phpClass = store.create(PHPInterfaceDescriptor.class);
+            phpClass.setFullQualifiedName(fullname);
+            if(namespace != null){
+                namespace.getTypes().add(phpClass);
             }
-            
-            phpClass.setName(name);
-            
-            return phpClass;
+            System.err.println("ADD Interface: " + fullname);
+        }
+
+        phpClass.setName(name);
+
+        return phpClass;
     }
     
     /**
@@ -108,7 +110,9 @@ public class Helper {
         if(phpClass == null){
             phpClass = store.create(PHPClassDescriptor.class);
             phpClass.setFullQualifiedName(fullname);
-            phpClass.setNamespace(namespace);
+            if(namespace != null){
+                namespace.getTypes().add(phpClass);
+            }
             System.err.println("ADD Class: " + fullname);
         }
         
@@ -129,7 +133,10 @@ public class Helper {
         if(phpClass == null){
             phpClass = store.create(PHPTraitDescriptor.class);
             phpClass.setFullQualifiedName(fullname);
-            phpClass.setNamespace(namespace);
+            if(namespace != null){
+                namespace.getTypes().add(phpClass);
+            }
+            
             System.err.println("ADD Trait: " + fullname);
         }
         
@@ -144,25 +151,27 @@ public class Helper {
      * @param parent
      * @return String
      */
-    private String type_getFullQualifiedName(String Name, PHPNamespaceDescriptor parent){
-        String namespace = Name.toLowerCase();
+    private String type_getFullQualifiedName(String Name, PHPNamespaceDescriptor namespace){
+        String fqn = Name.toLowerCase();
         
+        PHPNamespaceDescriptor parent = namespace;
         while(parent != null){
-            namespace = parent.getName().toLowerCase() + "|" + namespace;
+            fqn = parent.getName().toLowerCase() + "|" + fqn;
             parent = parent.getParent();
         }
         
-        return "TYPE|" + namespace;
+        return "TYPE|" + fqn;
     }
     
     /**
      * create method object or get exists
      * @param name
      * @param phpClass
+     * @param namespace
      * @return PHPMethodDescriptor
      */
-    public PHPFunctionDescriptor getFunction(String name, PHPTypeDescriptor phpClass){
-        String fullname = function_getFullQualifiedName(name, phpClass);
+    public PHPFunctionDescriptor getFunction(String name, PHPTypeDescriptor phpClass, PHPNamespaceDescriptor namespace){
+        String fullname = function_getFullQualifiedName(name, phpClass, namespace);
         PHPFunctionDescriptor phpMethod = store.find(PHPFunctionDescriptor.class, fullname);
         if(phpMethod == null){
             phpMethod = store.create(PHPFunctionDescriptor.class);
@@ -180,17 +189,17 @@ public class Helper {
      * @param phpClass
      * @return String
      */
-    private String function_getFullQualifiedName(String Name, PHPTypeDescriptor phpClass){
-        String namespace = Name.toLowerCase();
+    private String function_getFullQualifiedName(String Name, PHPTypeDescriptor phpClass, PHPNamespaceDescriptor namespace){
+        String fqn = Name.toLowerCase();
         
 
-        namespace = phpClass.getName().toLowerCase() + "|" + namespace;
-        PHPNamespaceDescriptor parent = phpClass.getNamespace();
+        fqn = phpClass.getName().toLowerCase() + "|" + fqn;
+        PHPNamespaceDescriptor parent = namespace;
         while(parent != null){
-            namespace = parent.getName().toLowerCase() + "|" + namespace;
+            fqn = parent.getName().toLowerCase() + "|" + fqn;
             parent = parent.getParent();
         }
-        return "METHOD|" + namespace;
+        return "METHOD|" + fqn;
 
     }
     
@@ -207,6 +216,9 @@ public class Helper {
             phpFunction = store.create(PHPFunctionDescriptor.class);
             phpFunction.setFullQualifiedName(fullname);
             phpFunction.setName(name);
+            if(namespace != null){
+                namespace.getFunctions().add(phpFunction);
+            }
             System.err.println("ADD Function: " + fullname);
         }
         

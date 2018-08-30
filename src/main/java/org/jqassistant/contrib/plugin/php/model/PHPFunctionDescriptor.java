@@ -15,16 +15,8 @@ import java.util.List;
  * php function
  * @author falk
  */
-@Label(value = "Function", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+@Label(value = "Method", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
 public interface PHPFunctionDescriptor extends PHPDescriptor, FullQualifiedNameDescriptor {
-    
-    /**
-     * used namespace
-     * @return namespace 
-     */
-    @Relation("HAS_NAMESPACE")
-    PHPNamespaceDescriptor getNamespace();
-    void setNamespace(PHPNamespaceDescriptor namespace);
     
     String getName();
     void setName(String name);

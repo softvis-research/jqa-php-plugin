@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
  * parse php files
@@ -21,7 +23,7 @@ public class PHPFileParser {
     
     protected PHPFileDescriptor fileDescriptor;
     protected Helper helper;
-    protected PHPNamespaceDescriptor namespace;
+    protected PHPNamespaceDescriptor namespace = null;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     
     public PHPFileParser(Helper helper, PHPFileDescriptor fileDescriptor){

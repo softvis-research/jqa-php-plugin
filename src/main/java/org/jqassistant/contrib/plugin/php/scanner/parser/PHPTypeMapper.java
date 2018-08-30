@@ -25,11 +25,13 @@ public class PHPTypeMapper {
     
     protected PHPTypeDescriptor phpClass;
     protected String mapType = "superclass";
+    protected PHPNamespaceDescriptor phpNamespace = null;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected Helper helper;
     
-    public PHPTypeMapper(Helper helper, PHPTypeDescriptor phpClass, String mapType, Map<String, PHPUse> useContext ){
+    public PHPTypeMapper(Helper helper, PHPTypeDescriptor phpClass, PHPNamespaceDescriptor phpNamespace, String mapType, Map<String, PHPUse> useContext ){
         this.phpClass = phpClass;
+        this.phpNamespace = phpNamespace;
         this.mapType = mapType;
         this.useContext = useContext;
         this.helper = helper;
@@ -91,7 +93,7 @@ public class PHPTypeMapper {
                     
                     if(!isMapped){
                         //use Namespace
-                        PHPNamespaceDescriptor n = phpClass.getNamespace();
+                        PHPNamespaceDescriptor n = phpNamespace;
                         while (n != null){
                             namelist.add(0, n.getName());
                             n = n.getParent();

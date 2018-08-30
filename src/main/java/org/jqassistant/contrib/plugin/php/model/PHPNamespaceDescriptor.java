@@ -8,6 +8,7 @@ package org.jqassistant.contrib.plugin.php.model;
 import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
+import java.util.List;
 
 /**
  * php namespace
@@ -23,8 +24,23 @@ public interface PHPNamespaceDescriptor extends PHPDescriptor, FullQualifiedName
      * parent namespace
      * @return namespace
      */
-    @Relation("CONTAINS")
+    @Relation("CONTAINS_NAMESPACE")
     PHPNamespaceDescriptor getParent();
     void setParent(PHPNamespaceDescriptor parent);
     
+    /**
+     * included functions
+     * @return list of functions 
+     */
+    @Relation("CONTAINS")
+    List<PHPFunctionDescriptor> getFunctions();
+    void setFunctions(List<PHPFunctionDescriptor> functions);
+        
+    /**
+     * included types (classes, interfaces, traits)
+     * @return list of types
+     */
+    @Relation("CONTAINS")
+    List<PHPTypeDescriptor> getTypes();
+    void setTypes(List<PHPTypeDescriptor> types);
 }

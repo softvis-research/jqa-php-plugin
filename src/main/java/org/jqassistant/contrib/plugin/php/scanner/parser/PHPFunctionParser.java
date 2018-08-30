@@ -21,7 +21,6 @@ import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
  * @author falk
  */
 public class PHPFunctionParser {
-    protected PHPNamespaceDescriptor namespace;
     protected Helper helper;
     protected Map<String, PHPUse> useContext = new HashMap<>();
     protected PHPFunctionDescriptor phpFunction;
@@ -29,13 +28,14 @@ public class PHPFunctionParser {
     protected PHPTypeDescriptor phpClass = null;
     protected List<String> modifire; 
 
-    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass){
-        this(helper, phpClass, new  HashMap<String, PHPUse>());
+    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass, PHPNamespaceDescriptor phpNamespace){
+        this(helper, phpClass, new  HashMap<String, PHPUse>(), phpNamespace);
     }
     
-    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext){
+    public PHPFunctionParser (Helper helper, PHPTypeDescriptor phpClass, Map<String, PHPUse> useContext, PHPNamespaceDescriptor phpNamespace){
         this.useContext = useContext;
         this.phpClass = phpClass;
+        this.phpNamespace = phpNamespace;
         this.helper = helper;
         
         modifire = new ArrayList<String>();
@@ -76,9 +76,9 @@ public class PHPFunctionParser {
         
         if(phpFunction == null && tree.getClass().getSimpleName().equals("IdentifierContext")){
             if(phpClass != null){
-                phpFunction = helper.getFunction(tree.getText(), phpClass);
+                phpFunction = helper.getFunction(tree.getText(), phpClass, phpNamespace);
             } else {
-                phpFunction = helper.getFunction(tree.getText(), namespace);
+                phpFunction = helper.getFunction(tree.getText(), phpNamespace);
             }
             
             phpFunction.setLinesOfCode(0);

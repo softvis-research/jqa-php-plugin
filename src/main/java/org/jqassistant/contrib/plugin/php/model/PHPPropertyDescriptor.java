@@ -12,7 +12,7 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
  * php class property
  * @author falk
  */
-@Label("Property")
+@Label("Field")
 public interface PHPPropertyDescriptor extends PHPDescriptor  {
 
     String getName();

@@ -84,24 +84,24 @@ public class PHPTypeParser {
                     return;
                 }
                 else if (tree.getChild(i).getClass().getSimpleName().equals("MethodBodyContext")){
-                    phpClass.getMethods().add((new PHPFunctionParser(helper, phpClass)).parse(tree));
+                    phpClass.getMethods().add((new PHPFunctionParser(helper, phpClass, namespace)).parse(tree));
                     return;
                 }
             }
         }
         else if(phpClass != null && tree.getClass().getSimpleName().equals("InterfaceListContext")){
-            (new PHPTypeMapper(helper, phpClass, "interface", useContext)).parse(tree);
+            (new PHPTypeMapper(helper, phpClass, namespace, "interface", useContext)).parse(tree);
             return;
         }
         else if(phpClass != null && level == 2 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("extends") && !type.equals("interface")){
-                (new PHPTypeMapper(helper, phpClass, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(helper, phpClass, namespace, "superclass", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }
         else if(phpClass != null && level == 3 && tree.getClass().getSimpleName().equals("TerminalNodeImpl")){
             if(tree.getText().toLowerCase().equals("use")){
-                (new PHPTypeMapper(helper, phpClass, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
+                (new PHPTypeMapper(helper, phpClass, namespace, "trait", useContext)).parse(tree.getParent().getChild(idx + 1));
                 return;
             }
         }

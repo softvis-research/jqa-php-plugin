@@ -33,7 +33,7 @@ public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescr
      * properties
      * @return list of properties
      */
-    @Relation("HAS_PROPERTIES")
+    @Relation("DECLARES")
     List<PHPPropertyDescriptor> getProperties();
     void setProperties(List<PHPPropertyDescriptor> properties);
     
@@ -44,14 +44,6 @@ public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescr
     @Relation("EXTENDS")
     PHPClassDescriptor getSuperClass();
     void setSuperClass(PHPClassDescriptor superClass);
-
-    /**
-     * used namespace
-     * @return namespace
-     */
-    @Relation("HAS_NAMESPACE")
-    PHPNamespaceDescriptor getNamespace();
-    void setNamespace(PHPNamespaceDescriptor namespace);
 
     /**
      * used interfaces
