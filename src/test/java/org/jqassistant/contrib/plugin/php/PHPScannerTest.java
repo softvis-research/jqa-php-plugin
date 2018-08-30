@@ -5,17 +5,14 @@ import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 import org.hamcrest.CoreMatchers;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
 
 /**

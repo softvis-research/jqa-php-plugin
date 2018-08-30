@@ -15,6 +15,7 @@ import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
+import org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor;
 
 /**
  * parse subtree and detect function characteristics 
@@ -61,7 +62,32 @@ public class PHPFunctionParser {
     public PHPFunctionDescriptor parse(ParseTree tree){
         parseTree(tree, 1);
         
+        phpFunction.setSignature(getSignature(phpFunction));
+        
         return phpFunction;
+    }
+    
+    protected String getSignature(PHPFunctionDescriptor phpFunction){
+        String signature = "";
+        
+        signature = phpFunction.getName();
+        
+        signature += "(";
+        
+        if(phpFunction.getParameters() != null){
+            int idx = 0;
+            for(PHPFunctionParameterDescriptor fp : phpFunction.getParameters()){
+                if(idx > 0){
+                    signature += ", ";
+                }
+                signature += fp.getName();
+                idx++;
+            }
+        }
+        
+        signature += ")";
+        
+        return signature;
     }
     
     /**

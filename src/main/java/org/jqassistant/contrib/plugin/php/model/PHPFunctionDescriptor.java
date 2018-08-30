@@ -70,5 +70,13 @@ public interface PHPFunctionDescriptor extends PHPDescriptor, FullQualifiedNameD
     int getEffectiveLineCount();
     void setEffectiveLineCount(int effectiveLineCount);
     
+    /**
+     * Signature of function
+     * @return integer 
+     */
+    @Property("signature")
+    String getSignature();
+    void setSignature(String signature);
+    
 
 }
