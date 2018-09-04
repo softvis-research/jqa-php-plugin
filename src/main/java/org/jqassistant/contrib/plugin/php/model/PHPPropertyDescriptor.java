@@ -15,6 +15,10 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
 @Label("Field")
 public interface PHPPropertyDescriptor extends PHPDescriptor  {
 
+    /**
+     * Name of field
+     * @return String 
+     */
     String getName();
     void setName(String name);
     

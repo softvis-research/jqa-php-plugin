@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jqassistant.contrib.plugin.php.scanner.parser.helper.PHPUse;
 import org.jqassistant.contrib.plugin.php.model.PHPNamespaceDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 
 /**
  * parse php files
@@ -48,13 +46,13 @@ public class PHPFileParser {
             case "UseDeclarationContentListContext":
                 PHPUse u = (new PHPUseParser()).parse(tree);
                 useContext.put(u.alias, u);
-                System.out.println("TEMP Use: " + u.getFullQualifiedName());
+                helper.logInfo("TEMP Use: " + u.getFullQualifiedName());
                 return;
             case "QualifiedNamespaceNameContext":
                 if(tree.getText().toLowerCase().startsWith("use")){
                     //BUGFIX: Parser ident Use with relative namespace as namespace stats with 'use'
                     PHPUse u2 = (new PHPUseParser()).skipFirst().parse(tree);
-                    System.out.println("TEMP Use: " + u2.getFullQualifiedName());
+                    helper.logInfo("TEMP Use: " + u2.getFullQualifiedName());
                     useContext.put(u2.alias, u2);
                 }
                 else {

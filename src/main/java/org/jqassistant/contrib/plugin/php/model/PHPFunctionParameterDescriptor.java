@@ -15,11 +15,18 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
 @Label("Parameter")
 public interface PHPFunctionParameterDescriptor extends PHPDescriptor{
     
+    /**
+     * Position of parameter
+     * @return Integer 
+     */
     @Property("index")
     int getIndex();
-
     void setIndex(int index);
     
+    /**
+     * Name of parameter
+     * @return String 
+     */
     String getName();
     void setName(String name);
     

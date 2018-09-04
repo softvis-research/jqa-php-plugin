@@ -17,6 +17,9 @@ import org.jqassistant.contrib.plugin.php.model.PHPTraitDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPTypeDescriptor;
 import org.jqassistant.contrib.plugin.php.model.VisibilityModifier;
 import org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor;
+import org.jqassistant.contrib.plugin.php.scanner.PHPSourceParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * helper class
@@ -26,10 +29,16 @@ public class Helper {
 
     protected Store store;
     protected TokenStream tokenStream;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PHPSourceParser.class);
+    
     
     public Helper(Store store, TokenStream tokenStream){
         this.store = store;
         this.tokenStream = tokenStream;
+    }
+    
+    public void logInfo(String txt){
+        LOGGER.info(txt);
     }
     
     public Integer getLineNumberByTokenNumber(Integer tokenNumber){
@@ -51,7 +60,7 @@ public class Helper {
             n.setFullQualifiedName(fullname);
             n.setName(name);
             n.setParent(parentNamespace);
-            System.err.println("ADD Namespace: " + fullname);
+            logInfo("ADD Namespace: " + fullname);
         }
 
         return n;
@@ -90,7 +99,7 @@ public class Helper {
             if(namespace != null){
                 namespace.getTypes().add(phpClass);
             }
-            System.err.println("ADD Interface: " + fullname);
+            logInfo("ADD Interface: " + fullname);
         }
 
         phpClass.setName(name);
@@ -113,7 +122,7 @@ public class Helper {
             if(namespace != null){
                 namespace.getTypes().add(phpClass);
             }
-            System.err.println("ADD Class: " + fullname);
+            logInfo("ADD Class: " + fullname);
         }
         
         phpClass.setName(name);
@@ -137,7 +146,7 @@ public class Helper {
                 namespace.getTypes().add(phpClass);
             }
             
-            System.err.println("ADD Trait: " + fullname);
+            logInfo("ADD Trait: " + fullname);
         }
         
         phpClass.setName(name);
@@ -177,7 +186,7 @@ public class Helper {
             phpMethod = store.create(PHPFunctionDescriptor.class);
             phpMethod.setFullQualifiedName(fullname);
             phpMethod.setName(name);
-            System.err.println("ADD Method: " + fullname);
+            logInfo("ADD Method: " + fullname);
         }
         
         return phpMethod;
@@ -219,7 +228,7 @@ public class Helper {
             if(namespace != null){
                 namespace.getFunctions().add(phpFunction);
             }
-            System.err.println("ADD Function: " + fullname);
+            logInfo("ADD Function: " + fullname);
         }
         
         return phpFunction;
@@ -245,6 +254,10 @@ public class Helper {
         return "FUNCTION|" + fullname;
     }
     
+    /**
+     * create new property
+     * @return PHPPropertyDescriptor
+     */
     public PHPPropertyDescriptor getProperty(){
         PHPPropertyDescriptor phpProperty = store.create(PHPPropertyDescriptor.class);
         phpProperty.setVisibility(VisibilityModifier.DEFAULT);
@@ -254,11 +267,17 @@ public class Helper {
         return phpProperty;
     }
     
+    /**
+     * create new function parameter
+     * @param idx
+     * @param name
+     * @return PHPFunctionParameterDescriptor
+     */
      public PHPFunctionParameterDescriptor getFunctionParameter(Integer idx, String name){
         PHPFunctionParameterDescriptor phpFunctionParameter = store.create(PHPFunctionParameterDescriptor.class);
         phpFunctionParameter.setIndex(idx);
         phpFunctionParameter.setName(name);
-        System.err.println("ADD FunctionParameter: " + idx + " " + name);
+        logInfo("ADD FunctionParameter: " + idx + " " + name);
         
         return phpFunctionParameter;
     }

@@ -20,30 +20,30 @@ import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
-import java.io.File;
-import java.io.InputStream;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
-
-
 import static java.util.Arrays.asList;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.apache.commons.io.FileUtils;
-import org.jqassistant.contrib.plugin.php.PhpLexer;
-import org.jqassistant.contrib.plugin.php.PhpParser;
-import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
 
+/**
+ * PHP file scanner
+ * @author falk
+ */
 @ScannerPlugin.Requires(FileDescriptor.class)
 public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PHPFileDescriptor> {
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(PHPFileScannerPlugin.class);
+    
     public static final String JQASSISTANT_PLUGIN_PHP_SUFFIXES = "jqassistant.plugin.php.suffixes";
 
     private static List<String> suffixes = asList("php", "phtml");
 
-
+    /**
+     * check if file accepted by this plugin
+     * @param item
+     * @param path
+     * @param scope
+     * @return boolean
+     * @throws IOException 
+     */
     @Override
     public boolean accepts(final FileResource item, final String path, final Scope scope) throws IOException {
         int beginIndex = path.lastIndexOf(".");
@@ -61,19 +61,20 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
         return false;
     }
 
+    /**
+     * scan php file
+     * @param item
+     * @param path
+     * @param scope
+     * @param scanner
+     * @return PHPFileDescriptor
+     * @throws IOException 
+     */
     @Override
     public PHPFileDescriptor scan(final FileResource item, final String path, final Scope scope, final Scanner scanner) throws IOException {
         final Store store = scanner.getContext().getStore();
-		FileDescriptor fileDescriptor = scanner.getContext().getCurrentDescriptor();
-		final PHPFileDescriptor phpFileDescriptor = store.addDescriptorType(fileDescriptor, PHPFileDescriptor.class);
-
-//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(item.createStream()))) {
-//            final PHPLineParser pumlLineParser = new PHPLineParser(store, phpFileDescriptor);
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                pumlLineParser.parseLine(line);
-//            }
-//        }
+        FileDescriptor fileDescriptor = scanner.getContext().getCurrentDescriptor();
+        final PHPFileDescriptor phpFileDescriptor = store.addDescriptorType(fileDescriptor, PHPFileDescriptor.class);
 
         phpFileDescriptor.setName(item.getFile().getName());
 
@@ -83,6 +84,9 @@ public class PHPFileScannerPlugin extends AbstractScannerPlugin<FileResource, PH
         return phpFileDescriptor;
     }
 
+    /**
+     * configuration
+     */
     @Override
     protected void configure() {
         super.configure();

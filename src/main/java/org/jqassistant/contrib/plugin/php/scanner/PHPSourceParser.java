@@ -7,27 +7,26 @@ package org.jqassistant.contrib.plugin.php.scanner;
 
 import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
-import java.io.IOException;
 import java.io.InputStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jqassistant.contrib.plugin.php.PhpLexer;
 import org.jqassistant.contrib.plugin.php.PhpParser;
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
-import org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor;
 import org.jqassistant.contrib.plugin.php.scanner.parser.PHPFileParser;
-import org.antlr.v4.runtime.misc.Interval;
 import org.jqassistant.contrib.plugin.php.scanner.parser.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author falk
  */
 public class PHPSourceParser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PHPSourceParser.class);
     private final Store store;
     private final PHPFileDescriptor fileDescriptor;
 
@@ -38,28 +37,25 @@ public class PHPSourceParser {
         this.fileDescriptor = fileDescriptor;
     }
 
+    /**
+     * parse php file
+     * @param item 
+     */
     void parseFile(final FileResource item) {
         try {
-         
             InputStream inputStream = item.createStream();
             Lexer lexer = new PhpLexer(CharStreams.fromStream(inputStream));
             TokenStream tokenStream = new CommonTokenStream(lexer);
             PhpParser parser = new PhpParser(tokenStream); 
-            //parser.setBuildParseTree(true);      
             ParseTree tree = parser.htmlDocument();
             //System.err.println(tree.toStringTree(parser));
             
             PHPFileParser a = new PHPFileParser(new Helper(store, tokenStream), this.fileDescriptor);
             a.parse(tree);
             
-//            Interval sourceInterval = tree.getChild(0).getSourceInterval();
-//            Token firstToken = tokenStream.get(sourceInterval.a);
-//            int line = firstToken.getLine();
-//            System.out.println("org.jqassistant.contrib.plugin.php.scanner.PHPSourceParser.parseFile()" + line) ;
-        
         } catch (Exception e) {
          e.printStackTrace();
-         System.out.println(e);
+            LOGGER.error("file parser error", e);
       }
     }
     

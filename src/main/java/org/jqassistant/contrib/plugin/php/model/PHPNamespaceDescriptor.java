@@ -17,6 +17,10 @@ import java.util.List;
 @Label(value = "Namespace", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
 public interface PHPNamespaceDescriptor extends PHPDescriptor, FullQualifiedNameDescriptor {
     
+    /**
+     * Name of namespace
+     * @return String 
+     */
     String getName();
     void setName(String name);
     

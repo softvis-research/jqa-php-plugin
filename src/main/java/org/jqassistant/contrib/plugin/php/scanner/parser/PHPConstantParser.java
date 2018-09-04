@@ -32,7 +32,7 @@ public class PHPConstantParser {
         phpProperty.setConstant(Boolean.TRUE);
         parseTree(tree, 1);
         
-        System.err.println("ADD Constant: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
+        helper.logInfo("ADD Constant: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
         return phpProperty;
     }
     

@@ -18,6 +18,10 @@ import com.buschmais.xo.neo4j.api.annotation.Relation.Outgoing;
 @Label(value = "Type", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
 public interface PHPTypeDescriptor extends PHPDescriptor, FullQualifiedNameDescriptor {
     
+    /**
+     * Name
+     * @return String 
+     */
     String getName();
     void setName(String name);
     

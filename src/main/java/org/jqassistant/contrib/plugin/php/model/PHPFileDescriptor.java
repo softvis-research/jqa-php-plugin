@@ -19,13 +19,6 @@ import java.util.List;
  */
 @Label("File")
 public interface PHPFileDescriptor extends PHPDescriptor, NamedDescriptor, FileDescriptor {
-
-//    /**
-//     * lines of code
-//     * @return set of lines
-//     */
-//    @Relation("HAS_LINE")
-//    Set<PHPLineDescriptor> getLines();
     
     /**
      * included functions

@@ -3,7 +3,6 @@
     <description>Provides a scanner for PHP files. Imports files line by line.</description>
     <model>
         <class>org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.php.model.PHPLineDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionDescriptor</class>
         <class>org.jqassistant.contrib.plugin.php.model.PHPFunctionParameterDescriptor</class>

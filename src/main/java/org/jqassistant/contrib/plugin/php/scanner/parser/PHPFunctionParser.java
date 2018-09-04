@@ -67,6 +67,11 @@ public class PHPFunctionParser {
         return phpFunction;
     }
     
+    /**
+     * get Signature of function
+     * @param phpFunction
+     * @return String
+     */
     protected String getSignature(PHPFunctionDescriptor phpFunction){
         String signature = "";
         
@@ -137,7 +142,7 @@ public class PHPFunctionParser {
             return;
         }
         else if (tree.getClass().getSimpleName().equals("BlockStatementContext")){
-            phpFunction.setEffectiveLineCount(countBodyLines(tree, 0));
+            phpFunction.setEffectiveLineCount(countBodyCommands(tree, 0));
             return;
         }
         
@@ -148,6 +153,11 @@ public class PHPFunctionParser {
         }
     }
     
+    /**
+     * add parameters to function
+     * @param tree
+     * @param level 
+     */
      protected void parseParameterListTree(ParseTree tree, int level){
 //        String pad = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF".substring(0, level);
 //        System.err.println(pad + " [" + tree.getClass().getSimpleName() + "]: " + tree.getText()); //getCanonicalName
@@ -164,14 +174,20 @@ public class PHPFunctionParser {
         }
      }
     
-    protected Integer countBodyLines(ParseTree tree, int linesOfCode){
+     /**
+      * Count tree notes, that represent a command
+      * @param tree
+      * @param linesOfCode
+      * @return Integer 
+      */
+    protected Integer countBodyCommands(ParseTree tree, int linesOfCode){
         if (tree.getClass().getSimpleName().equals("InnerStatementContext")){
             linesOfCode++;
         }
         
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            linesOfCode += countBodyLines(tree.getChild(i), 0);
+            linesOfCode += countBodyCommands(tree.getChild(i), 0);
         }
         
         return linesOfCode;

@@ -7,7 +7,8 @@ package org.jqassistant.contrib.plugin.php.scanner.parser.helper;
 
 
 /**
- *
+ * PHP use Element
+ * Temporary object, that represent a namespace or a type
  * @author falk
  */
 public class PHPUse {
@@ -16,7 +17,11 @@ public class PHPUse {
     public String name = "";
     public String alias = "";
     
-     public String getFullQualifiedName(){
+    /**
+     * get fqn of use
+     * @return String 
+     */
+    public String getFullQualifiedName(){
         String namespace = name.toLowerCase();
         
         PHPUse p = parent;

@@ -31,7 +31,7 @@ public class PHPPropertyParser {
         phpProperty.setLineNumber(helper.getLineNumberByTokenNumber(tree.getChild(0).getSourceInterval().a));
         parseTree(tree, 1);
         
-        System.err.println("ADD Property: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
+        helper.logInfo("ADD Property: " + phpProperty.getName() + " " + phpProperty.getVisibility() + (phpProperty.isStatic() ? " STATIC" : "") + (phpProperty.isConstant()? " CONSTANT" : ""));
         return phpProperty;
     }
     

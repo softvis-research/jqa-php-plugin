@@ -14,34 +14,28 @@ import static org.junit.Assert.assertTrue;
 
 import org.jqassistant.contrib.plugin.php.model.PHPFileDescriptor;
 import org.jqassistant.contrib.plugin.php.model.PHPClassDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Unit test for simple App.
+ * Unit test for plugin
  */
 public class PHPScannerTest extends AbstractPluginIT
-{
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
+{   
+    private static final Logger LOGGER = LoggerFactory.getLogger(PHPScannerTest.class);
     
     
     @Test
     public void scanPHPFileTest() {
-        System.out.println("org.jqassistant.contrib.plugin.php.scanPHPFileTest()");
-         store.beginTransaction();
+        LOGGER.info("START org.jqassistant.contrib.plugin.php.scanPHPFileTest()");
+        store.beginTransaction();
          
-         ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
-         File testFile = new File(classLoader.getResource("testfiles/index.php").getFile());
-          System.out.println(testFile.getAbsolutePath());
-          assertTrue (testFile.exists());
+        ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
+        File testFile = new File(classLoader.getResource("testfiles/index.php").getFile());
+        LOGGER.info(testFile.getAbsolutePath());
+        assertTrue (testFile.exists());
           
-        //getScanner().scan(testFile, "/index.php", DefaultScope.NONE);
-         assertThat(getScanner().scan(testFile, "/index.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
+        assertThat(getScanner().scan(testFile, "/index.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
          
         AbstractPluginIT.TestResult testResult = query("MATCH (PHPFile:PHP:File) RETURN PHPFile");
         List<PHPFileDescriptor> phpFiles = testResult.getColumn("PHPFile");
@@ -49,73 +43,50 @@ public class PHPScannerTest extends AbstractPluginIT
         
         PHPFileDescriptor phpFile = phpFiles.get(0);
         assertThat(phpFile.getFileName(), equalTo("/index.php"));
-        
-//        Set<PHPLineDescriptor> lines = phpFile.getLines();
-//        assertThat(lines.size(), equalTo(9));
-//        
-//        PHPLineDescriptor row0 = lines.iterator().next();
-//        assertThat(row0.getLineNumber(), equalTo(1));
-//        assertThat(row0.getText(), equalTo("<?php"));
          
+        store.commitTransaction();
+        
+        LOGGER.info("END org.jqassistant.contrib.plugin.php.scanPHPFileTest()");
+         
+    }
+    
+    @Test
+    public void scanPHPParserClassTest() {
+        LOGGER.info("org.jqassistant.contrib.plugin.php.scanPHPParserClassTest()");
+         store.beginTransaction();
+         
+        ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
+        File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
+        LOGGER.info(testFile.getAbsolutePath());
+        assertTrue (testFile.exists());
+          
+        testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
+        assertThat(getScanner().scan(testFile, "/class.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
+
+        AbstractPluginIT.TestResult testResult = query("MATCH (PHPClass:PHP:Class) RETURN PHPClass");
+        List<PHPClassDescriptor> phpClasses = testResult.getColumn("PHPClass");
+        assertThat(phpClasses.size(), equalTo(2));
+        
+        PHPClassDescriptor phpClass = phpClasses.get(0);
+        assertThat(phpClass.getName(), equalTo("index"));
+        assertThat(phpClass.getSuperClass().getName(), equalTo("d"));
+        assertThat(phpClass.getInterfaces().size(), equalTo(2));
+        
         store.commitTransaction();
     }
     
     @Test
-    public void scanPHPParserTest() {
-        System.out.println("org.jqassistant.contrib.plugin.php.scanPHPParserTest()");
-         store.beginTransaction();
+    public void scanPHPParserSimpleTest() {
+        LOGGER.info("org.jqassistant.contrib.plugin.php.scanPHPParserSimpleTest()");
+        store.beginTransaction();
          
-         ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
-         File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
-          System.out.println(testFile.getAbsolutePath());
-          assertTrue (testFile.exists());
+        ClassLoader classLoader = new PHPScannerTest().getClass().getClassLoader();
+        File testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
+        LOGGER.info(testFile.getAbsolutePath());
+        assertTrue (testFile.exists());
           
-//        getScanner().scan(testFile, "/index.php", DefaultScope.NONE);
-//         assertThat(getScanner().scan(testFile, "/index.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-         
-        testFile = new File(classLoader.getResource("testfiles/class.php").getFile());
-         assertThat(getScanner().scan(testFile, "/class.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-
-//        testFile = new File(classLoader.getResource("testfiles/impl_ext.php").getFile());
-//         assertThat(getScanner().scan(testFile, "/impl_ext.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-         
-//         testFile = new File(classLoader.getResource("testfiles/interface.php").getFile());
-//         assertThat(getScanner().scan(testFile, "/interface.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-//         
-//        testFile = new File(classLoader.getResource("testfiles/trait.php").getFile());
-//         assertThat(getScanner().scan(testFile, "/trait.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-        
-//        testFile = new File(classLoader.getResource("testfiles/challenge.php").getFile());
-//         assertThat(getScanner().scan(testFile, "/challenge.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
-         
-        store.commitTransaction();
-    }
-     
-    @Test
-    public void StoreTest() {
-         System.out.println("org.jqassistant.contrib.plugin.php.StoreTest()");
-         store.beginTransaction();
-         
-         PHPClassDescriptor v = store.create(PHPClassDescriptor.class);
-          store.create(PHPClassDescriptor.class);
-         v.setFullQualifiedName("test");
-         v.setName("blub");
-         // AbstractPluginIT.TestResult testResult;
-        
-//         testResult = query("MATCH (PHPClass:PHP:Class) RETURN PHPClass");
-//        List<PHPClass> phpClasses= testResult.getColumn("PHPClass");
-//        
-//         System.out.println(phpClasses.size());
-         
-//         for( Iterator<PHPClass> it = phpClasses.iterator(); it.hasNext(); )
-//        {
-//            PHPClass b = it.next();
-//            System.out.println(b.getFullQualifiedName());
-//        }
-         
-        //System.out.println("test find");
-        PHPClassDescriptor f = store.find(PHPClassDescriptor.class, "test");
-         assertThat(f.getName(), equalTo("blub"));
+        testFile = new File(classLoader.getResource("testfiles/simple.php").getFile());
+        assertThat(getScanner().scan(testFile, "/simple.php", DefaultScope.NONE), CoreMatchers.<Descriptor>instanceOf(PHPFileDescriptor.class));
         
         store.commitTransaction();
     }
