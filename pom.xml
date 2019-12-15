@@ -7,12 +7,12 @@
     <parent>
         <groupId>org.jqassistant.contrib.common</groupId>
         <artifactId>parent</artifactId>
-        <version>1.6.0</version>
+        <version>1.7.0</version>
     </parent>
 
     <groupId>org.jqassistant.contrib.plugin</groupId>
     <artifactId>jqa-php-plugin</artifactId>
-    <version>0.0.10</version>
+    <version>0.0.11</version>
 
     <name>jQAssistant PHP Plugin</name>
     <description>The jQAssistant plugin to scan and to analyze PHP files.</description>
@@ -41,6 +41,13 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <antlr.version>4.7</antlr.version>
     </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:softvis-research/jqa-php-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:softvis-research/jqa-php-plugin.git</developerConnection>
+        <url>https://github.com/softvis-research/jqa-php-plugin.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
